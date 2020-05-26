@@ -17,7 +17,7 @@ ArrayList<T>::ArrayList(int n) {
 template <typename T>
 void ArrayList<T>::expand() {
     _length <<= 1;
-    T* _new_array = new T[_length]
+    T* _new_array = new T[_length];
 
     for (int i=0; i < _size; i++)
         _new_array[i] = _array[i];
@@ -88,3 +88,11 @@ T ArrayList<T>::pop() {
     return _array[--_size];
 }
 
+class HiObject;
+template class ArrayList<HiObject*>;
+
+class HiString;
+template class ArrayList<HiString*>;
+
+class HiInteger;
+template class ArrayList<HiInteger*>;

@@ -1,13 +1,15 @@
-# include "util/BufferedInputStream.hpp"
+# include <stdio.h>
+# include <code/binaryFileParser.hpp>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argvs)
+{
     if (argc <= 1) {
-        printf("vm need a parameter: filename\n");
+        printf("vm need a parameter!\n");
         return 0;
     }
 
-    BufferedInputStream stream(argv[1]);
-    printf("0x%x\n", stream.read_int());
-
+    BufferedInputStream stream(argvs[1]);
+    BinaryFileParser parser(&stream);
+    CodeObject* code_object = parser.parse();
     return 0;
 }

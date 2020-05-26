@@ -9,7 +9,7 @@ private:
 
 
 public:
-    ArrayList(int n = 0);
+    ArrayList(int n = 8);
 
     void append(T t);
     void insert(int index, T t);
@@ -18,4 +18,8 @@ public:
     int  size();
     int  length();
     T    pop();
-}
+    
+    ~ArrayList() {
+        delete[] _array;
+    };
+};
