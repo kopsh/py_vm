@@ -24,7 +24,7 @@ CodeObject *BinaryFileParser::parse()
     if (object_type == 'c')
     {
         CodeObject *result = get_code_object();
-        printf("parse OK!");
+        printf("parse OK!\n");
         return result;
     }
 
