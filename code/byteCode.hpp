@@ -22,6 +22,6 @@ public:
         EQUAL,
         NOT_EQUAL,
         GREATER,
-        EQUALER_GREATER
-    }
+        GREATER_EQUAL
+    };
 };
