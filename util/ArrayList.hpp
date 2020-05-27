@@ -1,3 +1,5 @@
+# ifndef ARRAY_LIST_HPP
+# define ARRAY_LIST_HPP
 template <typename T>
 class ArrayList {
 private:
@@ -18,8 +20,9 @@ public:
     int  size();
     int  length();
     T    pop();
-    
+
     ~ArrayList() {
         delete[] _array;
     };
 };
+# endif

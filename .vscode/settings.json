@@ -10,6 +10,12 @@
         "string": "cpp",
         "__node_handle": "cpp",
         "optional": "cpp",
-        "system_error": "cpp"
-    }
+        "system_error": "cpp",
+        "__locale": "cpp",
+        "__string": "cpp",
+        "string_view": "cpp",
+        "iterator": "cpp"
+    },
+    "cmake.configureOnOpen": true,
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }

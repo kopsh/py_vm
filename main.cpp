@@ -1,5 +1,6 @@
 # include <stdio.h>
-# include <code/binaryFileParser.hpp>
+# include "code/binaryFileParser.hpp"
+# include "runtime/interpreter.hpp"
 
 int main(int argc, char** argvs)
 {
@@ -10,6 +11,9 @@ int main(int argc, char** argvs)
 
     BufferedInputStream stream(argvs[1]);
     BinaryFileParser parser(&stream);
-    CodeObject* code_object = parser.parse();
+    CodeObject* main_code = parser.parse();
+
+    Interpreter* i = Interpreter::get_instance();
+    i->run(main_code);
     return 0;
 }

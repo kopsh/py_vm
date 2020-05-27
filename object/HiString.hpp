@@ -13,8 +13,8 @@ public:
     HiString(const char* x);
     HiString(const char* x, const int length);
     
-    const char * value() { return value;}
-    int length()         { return length;}
+    const char * value();
+    int length();
 };
 
 
