@@ -7,6 +7,10 @@
 # include <string.h>
 # include <iostream>
 
+# define PUSH(x) _stack->append((x))
+# define POP() _stack->pop()
+
+
 Interpreter* Interpreter::_instance = NULL;
 
 Interpreter* Interpreter::get_instance() {
@@ -45,11 +49,11 @@ void Interpreter::run(CodeObject* codes) {
         switch (op_code)
         {
             case ByteCode::LOAD_CONST:
-                _stack->append(_consts->get(op_arg));
+                PUSH(_consts->get(op_arg));
                 break;
 
             case ByteCode::PRINT_ITEM:
-                v = _stack->pop();
+                v = POP();
                 v->print();
                 break;
 
@@ -58,13 +62,13 @@ void Interpreter::run(CodeObject* codes) {
                 break;
             
             case ByteCode::BINARY_ADD:
-                v = _stack->pop();
-                w = _stack->pop();
-                _stack->append(w->add(v));
+                v = POP();
+                w = POP();
+                PUSH(w->add(v));
                 break;
 
             case ByteCode::RETURN_VALUE:
-                _stack->pop();
+                POP();
                 break;
 
             default:
