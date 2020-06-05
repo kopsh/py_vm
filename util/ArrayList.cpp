@@ -1,4 +1,4 @@
-# include "ArrayList.hpp"
+# include "arrayList.hpp"
 # include <stdio.h>
 
 /*
