@@ -137,6 +137,10 @@ void Interpreter::run(CodeObject* codes) {
                 pc += op_arg;
                 break;
 
+            case ByteCode::JUMP_ABSOLUTE:
+                pc = op_arg;
+                break;
+                
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 

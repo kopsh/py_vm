@@ -14,6 +14,7 @@ public:
 
     /* number of bytes to skip */
     static const unsigned char JUMP_FORWARD = 110;
+    static const unsigned char JUMP_ABSOLUTE = 113;
     static const unsigned char POP_JUMP_IF_FALSE = 114;
 
     enum COMPARE {
