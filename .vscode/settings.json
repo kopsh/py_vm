@@ -14,8 +14,17 @@
         "__locale": "cpp",
         "__string": "cpp",
         "string_view": "cpp",
-        "iterator": "cpp"
+        "iterator": "cpp",
+        "__bit_reference": "cpp",
+        "__hash_table": "cpp",
+        "__threading_support": "cpp",
+        "algorithm": "cpp",
+        "array": "cpp",
+        "bitset": "cpp",
+        "typeinfo": "cpp",
+        "vector": "cpp"
     },
     "cmake.configureOnOpen": true,
-    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    "python.pythonPath": "/usr/bin/python"
 }

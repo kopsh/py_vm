@@ -15,6 +15,8 @@ public:
     
     const char * value();
     int length();
+
+    virtual HiObject* equal(HiObject* x);
 };
 
 

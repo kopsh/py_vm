@@ -1,4 +1,6 @@
 # include "HiString.hpp"
+# include "runtime/universe.hpp"
+
 # include "string.h"
 
 HiString::HiString(const char * x) {
@@ -21,4 +23,10 @@ const char* HiString::value() {
 
 int HiString::length() {
     return _length;
+}
+
+HiObject* HiString::equal(HiObject* other) {
+    if (strcmp(_value, ((HiString* )other)->_value) == 0)
+        return Universe::HiTrue;
+    return Universe::HiFalse;
 }

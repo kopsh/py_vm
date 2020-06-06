@@ -1,4 +1,4 @@
-# include "arrayList.hpp"
+# include "ArrayList.hpp"
 # include <stdio.h>
 
 /*
@@ -96,3 +96,6 @@ template class ArrayList<HiString*>;
 
 class HiInteger;
 template class ArrayList<HiInteger*>;
+
+class Block;
+template class ArrayList<Block*>;

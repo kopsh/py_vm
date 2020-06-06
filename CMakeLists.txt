@@ -12,6 +12,7 @@ ADD_EXECUTABLE(pyvm main.cpp
     object/HiInteger.cpp
     runtime/interpreter.cpp
     runtime/universe.cpp
-    util/ArrayList.cpp)
+    util/ArrayList.cpp
+    util/Map.cpp)
 
 INCLUDE_DIRECTORIES(./)

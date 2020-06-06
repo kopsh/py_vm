@@ -4,12 +4,14 @@
 # include "runtime/interpreter.hpp"
 # include "runtime/universe.hpp"
 # include "util/ArrayList.hpp"
+# include "util/Map.hpp"
 
 # include <string.h>
 # include <iostream>
 
 # define PUSH(x) _stack->append((x))
 # define POP() _stack->pop()
+# define STACK_LEVEL() _stack->size()
 
 
 Interpreter* Interpreter::_instance = NULL;
@@ -30,9 +32,14 @@ void Interpreter::run(CodeObject* codes) {
     int pc = 0;
     int code_length = codes->_bytecodes->length();
     
+    Block* b;
 
     ArrayList<HiObject*>* _stack = new ArrayList<HiObject*>(codes->_stacksize);
     ArrayList<HiObject*>* _consts = codes->_consts;
+    ArrayList<HiObject*>* _names = codes->_names;
+    Map<HiObject*, HiObject*>* _locals = new Map<HiObject*, HiObject*>();
+
+    ArrayList<Block*>* _loop_stack = new ArrayList<Block*>();
 
     while (pc < code_length) {
         unsigned char op_code = codes->_bytecodes->value()[pc++];
@@ -51,6 +58,16 @@ void Interpreter::run(CodeObject* codes) {
         {
             case ByteCode::LOAD_CONST:
                 PUSH(_consts->get(op_arg));
+                break;
+
+            case ByteCode::STORE_NAME:
+                v = _names->get(op_arg);
+                _locals->put(v, POP());
+                break;
+            
+            case ByteCode::LOAD_NAME:
+                v = _names->get(op_arg);
+                PUSH(_locals->get(v));
                 break;
 
             case ByteCode::PRINT_ITEM:
@@ -140,7 +157,26 @@ void Interpreter::run(CodeObject* codes) {
             case ByteCode::JUMP_ABSOLUTE:
                 pc = op_arg;
                 break;
-                
+            
+            case ByteCode::SETUP_LOOP:
+                _loop_stack->append(new Block(op_code, pc+op_arg, STACK_LEVEL()));
+                break;
+
+            case ByteCode::POP_BLOCK:
+                b = _loop_stack->pop();
+                while (STACK_LEVEL() > b->_level) {
+                    POP();
+                }
+                break;
+            
+            case ByteCode::BREAK_LOOP:
+                b = _loop_stack->pop();
+                while (STACK_LEVEL() > b->_level) {
+                    POP();
+                }
+                pc = b->_target;
+                break;
+
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 

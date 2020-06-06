@@ -8,8 +8,8 @@ public:
     V _v;
 
     MapEntry(const MapEntry<K, V>& entry);
-    MapEntry(K k, V v) _k(k), _v(v) {};
-    MapEntry() _k(0), _v(0) {};
+    MapEntry(K k, V v): _k(k), _v(v) {};
+    MapEntry(): _k(0), _v(0) {};
 };
 
 template <typename K, typename V>
@@ -30,7 +30,7 @@ public:
     V remove(K k);
     int index(K k);
     bool has_key(K k);
-    MapEntry<K, V>* entries {return _entries;}
+    MapEntry<K, V>* entries() {return _entries;}
 };
 
 # endif

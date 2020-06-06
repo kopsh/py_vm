@@ -35,7 +35,7 @@ int Map<K, V>::index(K k) {
             return i;
     }
 
-    return -1
+    return -1;
 }
 
 template <typename K, typename V>
@@ -54,7 +54,7 @@ bool Map<K, V>::has_key(K k) {
 
 template <typename K, typename V>
 V Map<K, V>::get(K k) {
-    i = index(k);
+    int i = index(k);
     if (i < 0)
         return Universe::HiNone;
     return _entries[i]._v;
