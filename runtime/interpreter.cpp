@@ -9,9 +9,9 @@
 # include <string.h>
 # include <iostream>
 
-# define PUSH(x) _stack->append((x))
-# define POP() _stack->pop()
-# define STACK_LEVEL() _stack->size()
+# define PUSH(x) _frame->stack()->append((x))
+# define POP() _frame->stack()->pop()
+# define STACK_LEVEL() _frame->stack()->size()
 
 
 Interpreter* Interpreter::_instance = NULL;
@@ -25,30 +25,24 @@ Interpreter* Interpreter::get_instance() {
 }
 
 Interpreter::Interpreter() {
-
+    _frame = NULL;
 }
 
 void Interpreter::run(CodeObject* codes) {
-    int pc = 0;
-    int code_length = codes->_bytecodes->length();
+    _frame = new FrameObject(codes);
     
     Block* b;
+    int op_arg;
+    unsigned char op_code;
+    bool has_argument;
 
-    ArrayList<HiObject*>* _stack = new ArrayList<HiObject*>(codes->_stacksize);
-    ArrayList<HiObject*>* _consts = codes->_consts;
-    ArrayList<HiObject*>* _names = codes->_names;
-    Map<HiObject*, HiObject*>* _locals = new Map<HiObject*, HiObject*>();
+    while (_frame->has_more_codes()) 
+    {
+        op_code = _frame->get_op_code();
+        has_argument = (op_code & 0xFF) >= ByteCode::HAVE_ARGUMENT; // 操作数大于90，表示带参数
 
-    ArrayList<Block*>* _loop_stack = new ArrayList<Block*>();
-
-    while (pc < code_length) {
-        unsigned char op_code = codes->_bytecodes->value()[pc++];
-        bool has_argument = (op_code & 0xFF) >= ByteCode::HAVE_ARGUMENT; // 操作数大于90，表示带参数
-
-        int op_arg = -1;
         if (has_argument) {
-            int byte1 = (codes->_bytecodes->value()[pc++]) & 0xFF;
-            op_arg = ((codes->_bytecodes->value()[pc++]) & 0xFF) << 8 | byte1;
+            op_arg = _frame->get_op_arg();
         }
 
         // HiInteger *lhs, *rhs;
@@ -57,17 +51,17 @@ void Interpreter::run(CodeObject* codes) {
         switch (op_code)
         {
             case ByteCode::LOAD_CONST:
-                PUSH(_consts->get(op_arg));
+                PUSH(_frame->consts()->get(op_arg));
                 break;
 
             case ByteCode::STORE_NAME:
-                v = _names->get(op_arg);
-                _locals->put(v, POP());
+                v = _frame->names()->get(op_arg);
+                _frame->locals()->put(v, POP());
                 break;
             
             case ByteCode::LOAD_NAME:
-                v = _names->get(op_arg);
-                PUSH(_locals->get(v));
+                v = _frame->names()->get(op_arg);
+                PUSH(_frame->locals()->get(v));
                 break;
 
             case ByteCode::PRINT_ITEM:
@@ -147,34 +141,34 @@ void Interpreter::run(CodeObject* codes) {
             */
                 v = POP();
                 if (v == Universe::HiFalse) //如果上一步的比较操作为False，指令计数器pc移动至绝对位置20处，继续执行指令
-                    pc = op_arg;
+                    _frame->set_pc(op_arg);
                 break;
 
             case ByteCode::JUMP_FORWARD:
-                pc += op_arg;
+                _frame->set_pc(op_arg + _frame->get_pc());
                 break;
 
             case ByteCode::JUMP_ABSOLUTE:
-                pc = op_arg;
+                _frame->set_pc(op_arg);
                 break;
             
             case ByteCode::SETUP_LOOP:
-                _loop_stack->append(new Block(op_code, pc+op_arg, STACK_LEVEL()));
+                _frame->loop_stack()->append(new Block(op_code, _frame->get_pc()+op_arg, STACK_LEVEL()));
                 break;
 
             case ByteCode::POP_BLOCK:
-                b = _loop_stack->pop();
+                b = _frame->loop_stack()->pop();
                 while (STACK_LEVEL() > b->_level) {
                     POP();
                 }
                 break;
             
             case ByteCode::BREAK_LOOP:
-                b = _loop_stack->pop();
+                b = _frame->loop_stack()->pop();
                 while (STACK_LEVEL() > b->_level) {
                     POP();
                 }
-                pc = b->_target;
+                _frame->set_pc(b->_target);
                 break;
 
             default:
