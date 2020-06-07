@@ -10,6 +10,7 @@ ADD_EXECUTABLE(pyvm main.cpp
     code/binaryFileParser.cpp
     object/HiString.cpp
     object/HiInteger.cpp
+    object/HiObject.cpp
     runtime/interpreter.cpp
     runtime/universe.cpp
     util/ArrayList.cpp

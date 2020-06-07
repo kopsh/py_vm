@@ -9,7 +9,7 @@ private:
     HiString* _name;
 
 public:
-    Klass();
+    Klass() {};
     void set_name(HiString* x) {_name = x;}
     HiString* name() {return _name;}
 

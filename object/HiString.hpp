@@ -1,8 +1,19 @@
 # ifndef _HI_STRING_HPP
 # define _HI_STRING_HPP
 
-
 # include "HiObject.hpp"
+
+class StringKlass : public Klass {
+private:
+    StringKlass() {}
+    static StringKlass* instance;
+
+public:
+    static StringKlass* get_instance();
+
+    virtual void print(HiObject* obj);
+    virtual HiObject* equal(HiObject* x, HiObject* y);
+};
 
 class HiString : public HiObject {
 private:
@@ -15,8 +26,6 @@ public:
     
     const char * value();
     int length();
-
-    virtual HiObject* equal(HiObject* x);
 };
 
 
