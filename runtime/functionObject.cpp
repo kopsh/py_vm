@@ -33,6 +33,14 @@ FunctionObject::FunctionObject(HiObject* code_obj) {
     _func_code = co;
     _func_name = co->_co_name;
     _flags = co->_flag;
+    _defaults = NULL;
 
     set_klass(FunctionKlass::get_instance());
+}
+
+void FunctionObject::set_defaults(ObjList defaults) {
+    if (defaults != NULL) {
+        _defaults = new ArrayList<HiObject*>(defaults);
+    }
+
 }

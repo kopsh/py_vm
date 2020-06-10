@@ -41,24 +41,28 @@ private:
         因此，functionObject需要自己的globals表
     */
     
-    Map<HiObject*, HiObject*>* _globals;    
+    Map<HiObject*, HiObject*>* _globals;
+    ObjList _defaults;
 
     unsigned int _flags;
 
 public:
     FunctionObject(HiObject* code_object);
-    // FunctionObject(Klass* klass) {
-    //     _func_code = NULL;
-    //     _func_name = NULL;
-    //     _flags = 0;
+    FunctionObject(Klass* klass) {
+        _func_code = NULL;
+        _func_name = NULL;
+        _flags = 0;
+        _defaults = NULL;
 
-    //     set_class(klass);
-    // }
+        set_klass(klass);
+    }
 
     HiString* func_name() {return _func_name;}
     void set_globals(Map<HiObject*, HiObject*>* x) {_globals = x;}
     Map<HiObject*, HiObject*>* globals() {return _globals;}
     int flags() {return _flags;}
+    void set_defaults(ObjList x);
+    ObjList defaults() {return _defaults;}
 };
 
 # endif
