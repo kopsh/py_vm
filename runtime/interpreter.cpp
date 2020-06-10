@@ -39,8 +39,8 @@ Interpreter::Interpreter() {
 }
 
 // 创建新的frameObject，由它维护新的运行状态
-void Interpreter::build_frame(HiObject* callable) {
-    FrameObject* frame = new FrameObject((FunctionObject* ) callable);
+void Interpreter::build_frame(HiObject* callable, ObjList args) {
+    FrameObject* frame = new FrameObject((FunctionObject* ) callable, args);
     frame->set_sender(_frame);
     _frame = frame;
 }
@@ -99,19 +99,19 @@ void Interpreter::eval_frame() {
             case ByteCode::LOAD_NAME:
                 v = _frame->names()->get(op_arg);
                 w = _frame->locals()->get(v);
-                if (w != HI_FALSE) {
+                if (w != HI_NONE) {
                     PUSH(w);
                     break;
                 }
 
                 w = _frame->globals()->get(v);
-                if (w != HI_FALSE) {
+                if (w != HI_NONE) {
                     PUSH(w);
                     break;
                 }
 
                 w = _builtins->get(v);
-                if (w != HI_FALSE) {
+                if (w != HI_NONE) {
                     PUSH(w);
                     break;
                 }
@@ -254,8 +254,30 @@ void Interpreter::eval_frame() {
             case ByteCode::CALL_FUNCTION: 
             /*
                 切换为新的frameObject，新的frameObject的sender指针指向调用它的frameObject
-            */
-                build_frame(POP());
+            */ 
+                ObjList args = NULL;
+                if (args>0) {
+                    ObjList args = new ArrayList<HiObject*>(op_arg);
+
+                    while (op_arg--) {
+                        args->set(op_arg, POP());
+                    }
+                }
+
+                build_frame(POP(), args);
+
+                if (args != NULL) {
+                    delete args;
+                    args = NULL;
+                }
+                break;
+
+            case ByteCode::LOAD_FAST:
+                PUSH(_frame->_fast_locals->get(op_arg));
+                break;
+
+            case ByteCode::STORE_FAST:
+                _frame->_fast_locals->set(op_arg, POP());
                 break;
 
             default:

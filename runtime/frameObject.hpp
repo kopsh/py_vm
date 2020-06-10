@@ -32,7 +32,7 @@ class FunctionObject;
 class FrameObject {
 public:
     FrameObject(CodeObject* c);
-    FrameObject(FunctionObject* fo);
+    FrameObject(FunctionObject* fo, ObjList args);
 
     ArrayList<HiObject*>* _stack;
     ArrayList<Block*>* _loop_stack;
@@ -42,6 +42,7 @@ public:
 
     Map<HiObject*, HiObject*>* _locals;
     Map<HiObject*, HiObject*>* _globals;
+    ObjList _fast_locals;
 
     CodeObject* _codes;
     int _pc;

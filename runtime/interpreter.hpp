@@ -19,7 +19,7 @@ public:
     static Interpreter* get_instance();
     void run(CodeObject* code_object);
 
-    void build_frame(HiObject* callable);
+    void build_frame(HiObject* callable, ObjList args);
     void eval_frame();
     // void leave_frame();
     void destory_frame();
