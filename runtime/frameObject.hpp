@@ -34,11 +34,11 @@ public:
     FrameObject(CodeObject* c);
     FrameObject(FunctionObject* fo, ObjList args);
 
-    ArrayList<HiObject*>* _stack;
+    ObjList _stack;
     ArrayList<Block*>* _loop_stack;
 
-    ArrayList<HiObject*>* _consts;
-    ArrayList<HiObject*>* _names;
+    ObjList _consts;
+    ObjList _names;
 
     Map<HiObject*, HiObject*>* _locals;
     Map<HiObject*, HiObject*>* _globals;
@@ -53,10 +53,10 @@ public:
     void set_pc(int x) {_pc = x;}
     int get_pc() {return _pc;}
 
-    ArrayList<HiObject*>* stack() {return _stack;}
+    ObjList stack() {return _stack;}
     ArrayList<Block*>* loop_stack() {return _loop_stack;}
-    ArrayList<HiObject*>* names() {return _names;}
-    ArrayList<HiObject*>* consts() {return _consts;}
+    ObjList names() {return _names;}
+    ObjList consts() {return _consts;}
 
     Map<HiObject*, HiObject*>* locals() {return _locals;}
     Map<HiObject*, HiObject*>* globals() {return _globals;}

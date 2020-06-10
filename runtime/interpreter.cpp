@@ -70,6 +70,7 @@ void Interpreter::eval_frame() {
     int op_arg;
     unsigned char op_code;
     bool has_argument;
+    ObjList args;
 
     FunctionObject* fo;
 
@@ -255,9 +256,8 @@ void Interpreter::eval_frame() {
             /*
                 切换为新的frameObject，新的frameObject的sender指针指向调用它的frameObject
             */ 
-                ObjList args = NULL;
-                if (args>0) {
-                    ObjList args = new ArrayList<HiObject*>(op_arg);
+                if (op_arg > 0) {
+                    args = new ArrayList<HiObject*>(op_arg);
 
                     while (op_arg--) {
                         args->set(op_arg, POP());
