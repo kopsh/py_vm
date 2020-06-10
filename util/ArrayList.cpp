@@ -1,5 +1,7 @@
 # include "ArrayList.hpp"
+
 # include <stdio.h>
+# include "string.h"
 
 /*
 构造函数
@@ -9,6 +11,17 @@ ArrayList<T>::ArrayList(int n) {
     _length = n;
     _size = 0;
     _array = new T[n];
+}
+
+template <typename T>
+ArrayList<T>::ArrayList(const ArrayList<T>* other) {
+    _length = other->_length;
+    _size = other->_size;
+    _array = new T[_length];
+
+    for (int i=0; i < _length; i++) {
+        _array[i] = other->_array[i];
+    }
 }
 
 /*
