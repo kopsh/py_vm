@@ -23,12 +23,17 @@ public:
     static const unsigned char POP_JUMP_IF_FALSE = 114;
     static const unsigned char SETUP_LOOP = 120; // target address (relative)
 
+    static const unsigned char CALL_FUNCTION = 131;
+    static const unsigned char MAKE_FUNCTION = 132;
+
     enum COMPARE {
         LESS = 0,
         LESS_EQUAL,
         EQUAL,
         NOT_EQUAL,
         GREATER,
-        GREATER_EQUAL
+        GREATER_EQUAL,
+        IS = 8,
+        IS_NOT
     };
 };

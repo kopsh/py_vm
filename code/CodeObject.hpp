@@ -23,7 +23,7 @@ public:
     ArrayList<HiObject*>* _free_vals;
     ArrayList<HiObject*>* _cell_vals;
 
-    HiString* _co_name;
+    HiString* _co_name; // code object name
     HiString* _file_name;
 
     int _lineno;

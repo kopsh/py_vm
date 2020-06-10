@@ -1,6 +1,7 @@
 # include "code/CodeObject.hpp"
 # include "object/HiInteger.hpp"
 # include "object/HiString.hpp"
+# include "runtime/functionObject.hpp"
 # include "runtime/interpreter.hpp"
 # include "runtime/universe.hpp"
 # include "util/ArrayList.hpp"
@@ -13,6 +14,9 @@
 # define POP() _frame->stack()->pop()
 # define STACK_LEVEL() _frame->stack()->size()
 
+# define HI_TRUE Universe::HiTrue
+# define HI_FALSE Universe::HiFalse
+# define HI_NONE Universe::HiNone
 
 Interpreter* Interpreter::_instance = NULL;
 
@@ -26,15 +30,48 @@ Interpreter* Interpreter::get_instance() {
 
 Interpreter::Interpreter() {
     _frame = NULL;
+
+    _builtins = new Map<HiObject*, HiObject*>();
+
+    _builtins->put(new HiString("True"), HI_TRUE);
+    _builtins->put(new HiString("False"), HI_FALSE);
+    _builtins->put(new HiString("None"), HI_NONE);
+}
+
+// 创建新的frameObject，由它维护新的运行状态
+void Interpreter::build_frame(HiObject* callable) {
+    FrameObject* frame = new FrameObject((FunctionObject* ) callable);
+    frame->set_sender(_frame);
+    _frame = frame;
 }
 
 void Interpreter::run(CodeObject* codes) {
     _frame = new FrameObject(codes);
-    
+    eval_frame();
+    destory_frame();
+}
+
+void Interpreter::destory_frame() {
+    if (_frame->is_first_frame())
+        return;
+
+    FrameObject* temp = _frame;
+    _frame = _frame->sender();
+
+    delete temp;
+}
+
+// void Interpreter::leave_frame() {
+// 
+// }
+
+void Interpreter::eval_frame() {
     Block* b;
     int op_arg;
     unsigned char op_code;
     bool has_argument;
+
+    FunctionObject* fo;
 
     while (_frame->has_more_codes()) 
     {
@@ -61,7 +98,26 @@ void Interpreter::run(CodeObject* codes) {
             
             case ByteCode::LOAD_NAME:
                 v = _frame->names()->get(op_arg);
-                PUSH(_frame->locals()->get(v));
+                w = _frame->locals()->get(v);
+                if (w != HI_FALSE) {
+                    PUSH(w);
+                    break;
+                }
+
+                w = _frame->globals()->get(v);
+                if (w != HI_FALSE) {
+                    PUSH(w);
+                    break;
+                }
+
+                w = _builtins->get(v);
+                if (w != HI_FALSE) {
+                    PUSH(w);
+                    break;
+                }
+
+
+                PUSH(HI_NONE);
                 break;
 
             case ByteCode::PRINT_ITEM:
@@ -80,7 +136,10 @@ void Interpreter::run(CodeObject* codes) {
                 break;
 
             case ByteCode::RETURN_VALUE:
-                POP();
+                _ret_value = POP();
+                // leave_frame();
+                destory_frame();
+                PUSH(_ret_value);
                 break;
 
             case ByteCode::COMPARE_OF:
@@ -113,6 +172,20 @@ void Interpreter::run(CodeObject* codes) {
                         PUSH(w->le(v));
                         break;
 
+                    case ByteCode::IS:
+                        if (v == w)
+                            PUSH(HI_TRUE);
+                        else
+                            PUSH(HI_FALSE);
+                        break;
+
+                    case ByteCode::IS_NOT:
+                        if (v == w)
+                            PUSH(HI_FALSE);
+                        else
+                            PUSH(HI_TRUE);
+                        break;
+
                     default:
                         printf("Error: unrecognized compare op %d\n", op_arg);
                 }
@@ -140,7 +213,7 @@ void Interpreter::run(CodeObject* codes) {
                             24 PRINT_NEWLINE
             */
                 v = POP();
-                if (v == Universe::HiFalse) //如果上一步的比较操作为False，指令计数器pc移动至绝对位置20处，继续执行指令
+                if (v == HI_FALSE) //如果上一步的比较操作为False，指令计数器pc移动至绝对位置20处，继续执行指令
                     _frame->set_pc(op_arg);
                 break;
 
@@ -169,6 +242,20 @@ void Interpreter::run(CodeObject* codes) {
                     POP();
                 }
                 _frame->set_pc(b->_target);
+                break;
+
+            case ByteCode::MAKE_FUNCTION:
+                v = POP();
+                fo = new FunctionObject(v);
+                fo->set_globals(_frame->globals());
+                PUSH(fo);
+                break;
+
+            case ByteCode::CALL_FUNCTION: 
+            /*
+                切换为新的frameObject，新的frameObject的sender指针指向调用它的frameObject
+            */
+                build_frame(POP());
                 break;
 
             default:

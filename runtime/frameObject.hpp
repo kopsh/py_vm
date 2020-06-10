@@ -27,10 +27,12 @@ public:
     }
 };
 
+class FunctionObject;
+
 class FrameObject {
 public:
     FrameObject(CodeObject* c);
-    FrameObject();
+    FrameObject(FunctionObject* fo);
 
     ArrayList<HiObject*>* _stack;
     ArrayList<Block*>* _loop_stack;
@@ -39,9 +41,12 @@ public:
     ArrayList<HiObject*>* _names;
 
     Map<HiObject*, HiObject*>* _locals;
+    Map<HiObject*, HiObject*>* _globals;
 
     CodeObject* _codes;
     int _pc;
+
+    FrameObject* _sender; // 记录调用者的栈帧，每调用一个新的栈帧，插入到链表头部，销毁时先销毁头结点，满足“后进先出”
 
 public:
     void set_pc(int x) {_pc = x;}
@@ -51,11 +56,17 @@ public:
     ArrayList<Block*>* loop_stack() {return _loop_stack;}
     ArrayList<HiObject*>* names() {return _names;}
     ArrayList<HiObject*>* consts() {return _consts;}
+
     Map<HiObject*, HiObject*>* locals() {return _locals;}
+    Map<HiObject*, HiObject*>* globals() {return _globals;}
 
     bool has_more_codes();
     unsigned char get_op_code();
     int get_op_arg();
+
+    void set_sender(FrameObject* fo) {_sender = fo;}
+    FrameObject* sender() {return _sender;}
+    bool is_first_frame() {return _sender == NULL;}
 };
 
 # endif

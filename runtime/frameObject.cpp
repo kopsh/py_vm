@@ -1,3 +1,4 @@
+# include "runtime/functionObject.hpp"
 # include "runtime/frameObject.hpp"
 # include "object/HiString.hpp"
 
@@ -9,9 +10,28 @@ FrameObject::FrameObject(CodeObject* codes) {
     _loop_stack = new ArrayList<Block*>();
 
     _locals = new Map<HiObject*, HiObject*>();
+    _globals = _locals;
 
     _codes = codes;
     _pc = 0;
+
+    _sender = NULL;
+}
+
+FrameObject::FrameObject(FunctionObject* func) {
+    _codes = func->_func_code;
+    _consts = _codes->_consts;
+    _names = _codes->_names;
+
+    _stack = new ArrayList<HiObject*>(_codes->_stacksize);
+    _loop_stack = new ArrayList<Block*>();
+
+    _locals = new Map<HiObject*, HiObject*>();
+    _globals = func->_globals;
+
+    _pc = 0;
+
+    _sender = NULL;
 }
 
 int FrameObject::get_op_arg() {
