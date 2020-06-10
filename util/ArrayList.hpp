@@ -25,4 +25,8 @@ public:
         delete[] _array;
     };
 };
+
+class HiObject;
+typedef ArrayList<HiObject*>* ObjList;
+
 # endif
