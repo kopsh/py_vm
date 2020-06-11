@@ -1,5 +1,6 @@
 # include "HiString.hpp"
 # include "runtime/universe.hpp"
+# include "util/ArrayList.hpp"
 
 # include "string.h"
 # include <iostream>
@@ -70,4 +71,30 @@ void StringKlass::print(HiObject* obj) {
 
 HiObject* StringKlass::len(HiObject* x) {
     return new HiInteger(((HiString* )x)->length());
+}
+
+HiObject* string_upper(ObjList args) {
+    HiObject* arg0 = args->get(0);
+
+    assert(arg0->klass() == StringKlass::get_instance());
+
+    HiString* s = (HiString* )arg0;
+    int length = s->length();
+
+    if (length <= 0)
+        return Universe::HiNone;
+
+    char* v = new char[length];
+    char c;
+    for (int i=0; i < length; i++) {
+        c = s->value()[i];
+        if ('a' <= c && 'z' >= c)
+            v[i] = c - 0x20;
+        else
+            v[i] = c;
+    }
+
+    HiString* res = new HiString(v, length);
+    delete[] v;
+    return res; 
 }

@@ -2,6 +2,7 @@
 # define _HI_STRING_HPP
 
 # include "HiObject.hpp"
+# include "util/ArrayList.hpp"
 
 class StringKlass : public Klass {
 private:
@@ -29,5 +30,6 @@ public:
     int length();
 };
 
+HiObject* string_upper(ObjList args);
 
 # endif

@@ -81,4 +81,36 @@ public:
     HiObject* call(ObjList args);
 };
 
+class MethodKlass : public Klass {
+private:
+    MethodKlass();
+    static MethodKlass* instance;
+
+public:
+    static MethodKlass* get_instance();
+};
+
+class MethodObject : public HiObject {
+friend class MethodKlass;
+
+private:
+    HiObject* _owner;
+    FunctionObject* _func;
+
+public:
+    MethodObject(FunctionObject* func): _owner(NULL), _func(func) {
+        set_klass(MethodKlass::get_instance());
+    }
+
+    MethodObject(HiObject* owner, FunctionObject* func): _owner(owner), _func(func) {
+        set_klass(MethodKlass::get_instance());
+    }
+    
+    HiObject* owner() {return _owner;}
+    void set_owner(HiObject* owner) {_owner = owner;}
+    FunctionObject* func() {return _func;}
+
+    static bool is_function(HiObject* x);
+};
+
 # endif

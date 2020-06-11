@@ -31,6 +31,7 @@ public:
     HiObject* le(HiObject *x);
 
     HiObject* len();
+    HiObject* getattr(HiObject* x);
 };
 
 # endif

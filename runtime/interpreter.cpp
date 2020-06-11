@@ -50,6 +50,13 @@ void Interpreter::build_frame(HiObject* callable, ObjList args) {
         frame->set_sender(_frame);
         _frame = frame;
     }
+    else if (callable->klass() == MethodKlass::get_instance()) {
+        MethodObject* mo = (MethodObject* ) callable;
+        if (args == NULL)
+            args = new ArrayList<HiObject*>(1);
+        args->insert(0, mo->owner());
+        build_frame(mo->func(), args);
+    }
 }
 
 void Interpreter::run(CodeObject* codes) {
@@ -77,7 +84,7 @@ void Interpreter::eval_frame() {
     int op_arg;
     unsigned char op_code;
     bool has_argument;
-    ObjList args;
+    ArrayList<HiObject*>* args = NULL;
 
     FunctionObject* fo;
 
@@ -311,6 +318,12 @@ void Interpreter::eval_frame() {
 
             case ByteCode::STORE_FAST:
                 _frame->_fast_locals->set(op_arg, POP());
+                break;
+
+            case ByteCode::LOAD_ATTR:
+                v = POP();
+                w = _frame->names()->get(op_arg);
+                PUSH(v->getattr(w));
                 break;
 
             default:

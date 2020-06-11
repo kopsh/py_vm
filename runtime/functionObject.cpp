@@ -3,6 +3,26 @@
 # include "object/HiString.hpp"
 # include "runtime/functionObject.hpp"
 
+MethodKlass* MethodKlass::instance = NULL;
+
+MethodKlass* MethodKlass::get_instance() {
+    if (instance == NULL)
+        instance = new MethodKlass();
+
+    return instance;
+}
+
+MethodKlass::MethodKlass() {
+    set_klass_dict(new HiDict());
+}
+
+bool MethodObject::is_function(HiObject* x) {
+    Klass* k = x->klass();
+    if (k == (Klass* ) FunctionKlass::get_instance() || k == (Klass* ) NativeFunctionKlass::get_instance())
+        return true;
+    return false;
+}
+
 FunctionKlass* FunctionKlass::instance = NULL;
 
 FunctionKlass* FunctionKlass::get_instance() {

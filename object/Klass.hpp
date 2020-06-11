@@ -1,17 +1,22 @@
 # ifndef KLASS_HPP
 # define KLASS_HPP
 
+# include "util/Map.hpp"
+
 class HiObject;
 class HiString;
 
 class Klass {
 private:
     HiString* _name;
+    HiDict* _klass_dict;
 
 public:
     Klass() {};
     void set_name(HiString* x) {_name = x;}
     HiString* name() {return _name;}
+    void set_klass_dict(HiDict* dict) {_klass_dict = dict;}
+    HiDict* klass_dict() {return _klass_dict;}
 
     virtual void print(HiObject* obj) {};
     virtual HiObject* greater(HiObject* x, HiObject* y) {return 0;}
