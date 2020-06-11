@@ -13,6 +13,7 @@ public:
 
     virtual void print(HiObject* obj);
     virtual HiObject* equal(HiObject* x, HiObject* y);
+    virtual HiObject* len(HiObject* x);
 };
 
 class HiString : public HiObject {

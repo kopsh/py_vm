@@ -15,6 +15,18 @@ public:
     virtual void print(HiObject* obj);
 };
 
+class NativeFunctionKlass : public Klass {
+private:
+    NativeFunctionKlass();
+    static NativeFunctionKlass* instance;
+
+public:
+    static NativeFunctionKlass* get_instance();
+};
+
+HiObject* len(ObjList args);
+typedef HiObject* (*NativeFuncPointer)(ObjList args);
+
 class FunctionObject : public HiObject {
 friend class FunctionKlass;
 friend class FrameObject;
@@ -43,11 +55,14 @@ private:
     
     Map<HiObject*, HiObject*>* _globals;
     ObjList _defaults;
+    NativeFuncPointer _native_func; // 函数指针, 指向要实现的native函数
 
     unsigned int _flags;
 
 public:
     FunctionObject(HiObject* code_object);
+    FunctionObject(NativeFuncPointer nfp);
+
     FunctionObject(Klass* klass) {
         _func_code = NULL;
         _func_name = NULL;
@@ -63,6 +78,7 @@ public:
     int flags() {return _flags;}
     void set_defaults(ObjList x);
     ObjList defaults() {return _defaults;}
+    HiObject* call(ObjList args);
 };
 
 # endif

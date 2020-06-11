@@ -26,6 +26,8 @@ public:
     virtual HiObject* mul(HiObject* x, HiObject* y) {return 0;}
     virtual HiObject* div(HiObject* x, HiObject* y) {return 0;}
     virtual HiObject* mod(HiObject* x, HiObject* y) {return 0;}
+
+    virtual HiObject* len(HiObject* x) {return 0;}
 };
 
 # endif

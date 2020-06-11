@@ -29,6 +29,8 @@ public:
     HiObject* not_equal(HiObject *x);
     HiObject* ge(HiObject *x);
     HiObject* le(HiObject *x);
+
+    HiObject* len();
 };
 
 # endif

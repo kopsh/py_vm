@@ -47,3 +47,7 @@ HiObject* HiObject::div(HiObject* rhs) {
 HiObject* HiObject::mod(HiObject* rhs) {
     return klass()->mod(this, rhs);
 }
+
+HiObject* HiObject::len() {
+    return klass()->len(this);
+}

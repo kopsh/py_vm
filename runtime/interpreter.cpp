@@ -36,13 +36,20 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("True"), HI_TRUE);
     _builtins->put(new HiString("False"), HI_FALSE);
     _builtins->put(new HiString("None"), HI_NONE);
+
+    _builtins->put(new HiString("len"), new FunctionObject(len));
 }
 
 // 创建新的frameObject，由它维护新的运行状态
 void Interpreter::build_frame(HiObject* callable, ObjList args) {
-    FrameObject* frame = new FrameObject((FunctionObject* ) callable, args);
-    frame->set_sender(_frame);
-    _frame = frame;
+    if (callable->klass() == NativeFunctionKlass::get_instance()) {
+        PUSH(((FunctionObject* )callable)->call(args));
+    }
+    else if (callable->klass() == FunctionKlass::get_instance()) {
+        FrameObject* frame = new FrameObject((FunctionObject* ) callable, args);
+        frame->set_sender(_frame);
+        _frame = frame;
+    }
 }
 
 void Interpreter::run(CodeObject* codes) {
@@ -104,20 +111,31 @@ void Interpreter::eval_frame() {
                     PUSH(w);
                     break;
                 }
-
                 w = _frame->globals()->get(v);
                 if (w != HI_NONE) {
                     PUSH(w);
                     break;
                 }
-
                 w = _builtins->get(v);
                 if (w != HI_NONE) {
                     PUSH(w);
                     break;
                 }
+                PUSH(HI_NONE);
+                break;
 
-
+            case ByteCode::LOAD_GLOBAL:
+                v = _frame->names()->get(op_arg);
+                w = _frame->globals()->get(v);
+                if (w != HI_NONE) {
+                    PUSH(w);
+                    break;
+                }
+                w = _builtins->get(v);
+                if (w != HI_NONE) {
+                    PUSH(w);
+                    break;
+                }
                 PUSH(HI_NONE);
                 break;
 

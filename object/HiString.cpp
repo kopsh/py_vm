@@ -67,3 +67,7 @@ void StringKlass::print(HiObject* obj) {
     for (int i=0; i < sobj->length(); i++)
         printf("%c", sobj->value()[i]);
 }
+
+HiObject* StringKlass::len(HiObject* x) {
+    return new HiInteger(((HiString* )x)->length());
+}

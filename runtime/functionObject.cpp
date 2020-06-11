@@ -16,6 +16,33 @@ FunctionKlass::FunctionKlass() {
     
 }
 
+NativeFunctionKlass* NativeFunctionKlass::instance = NULL;
+
+NativeFunctionKlass* NativeFunctionKlass::get_instance() {
+    if (instance == NULL)
+        instance = new NativeFunctionKlass();
+
+    return instance;
+}
+
+NativeFunctionKlass::NativeFunctionKlass() {
+    // set_super(FunctionKlass::get_instance());
+}
+
+FunctionObject::FunctionObject(NativeFuncPointer nfp) {
+    _func_code = NULL;
+    _func_name = NULL;
+    _flags = 0;
+    _globals = NULL;
+    _native_func = nfp;
+
+    set_klass(NativeFunctionKlass::get_instance());
+}
+
+HiObject* FunctionObject::call(ObjList args) {
+    return (*_native_func)(args);
+}
+
 void FunctionKlass::print(HiObject* obj) {
     printf("<function: ");
 
@@ -42,5 +69,8 @@ void FunctionObject::set_defaults(ObjList defaults) {
     if (defaults != NULL) {
         _defaults = new ArrayList<HiObject*>(defaults);
     }
+}
 
+HiObject* len(ObjList args) {
+    return args->get(0)->len();
 }
