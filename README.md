@@ -5,4 +5,5 @@ mkdir build
 cd build
 cmake ..
 make all
+./pyvm test.pyc
 ```
