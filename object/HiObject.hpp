@@ -33,6 +33,8 @@ public:
     HiObject* len();
     HiObject* subscr(HiObject* x);
     HiObject* getattr(HiObject* x);
+    HiObject* contains(HiObject* x);
+    HiObject* contains_not(HiObject* x);
 };
 
 # endif

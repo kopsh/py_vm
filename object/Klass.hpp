@@ -34,6 +34,8 @@ public:
 
     virtual HiObject* len(HiObject* x) {return 0;}
     virtual HiObject* subscr(HiObject* x, HiObject* y) {return 0;}
+    virtual HiObject* contains(HiObject* x, HiObject* y) {return 0;}
+    virtual HiObject* contains_not(HiObject* x, HiObject* y) {return 0;}
 };
 
 # endif

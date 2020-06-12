@@ -2,6 +2,7 @@
 
 # include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
+# include "runtime/universe.hpp"
 
 ListKlass* ListKlass::instance = NULL;
 
@@ -51,4 +52,30 @@ HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {
     HiInteger* iy = (HiInteger* ) y;
 
     return lx->get(iy->value());
+}
+
+HiObject* ListKlass::contains(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == ListKlass::get_instance());
+
+    HiList* lx = (HiList* ) x;
+
+    int size = lx->size();
+    for (int i=0; i < size; i++) {
+        if (lx->get(i)->equal(y))
+            return Universe::HiTrue;
+    }
+    return Universe::HiFalse;
+}
+
+HiObject* ListKlass::contains_not(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == ListKlass::get_instance());
+
+    HiList* lx = (HiList* ) x;
+
+    int size = lx->size();
+    for (int i=0; i < size; i++) {
+        if (lx->get(i)->equal(y))
+            return Universe::HiFalse;
+    }
+    return Universe::HiTrue;
 }

@@ -44,7 +44,9 @@ public:
         NOT_EQUAL,
         GREATER,
         GREATER_EQUAL,
-        IS = 8,
+        IN,
+        NOT_IN,
+        IS,
         IS_NOT
     };
 };
