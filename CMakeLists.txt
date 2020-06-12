@@ -8,9 +8,10 @@ SET(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wall")
 ADD_EXECUTABLE(pyvm main.cpp
     code/CodeObject.cpp
     code/binaryFileParser.cpp
-    object/HiString.cpp
     object/HiInteger.cpp
+    object/HiList.cpp
     object/HiObject.cpp
+    object/HiString.cpp
     runtime/frameObject.cpp
     runtime/functionObject.cpp
     runtime/interpreter.cpp

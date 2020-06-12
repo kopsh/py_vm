@@ -1,5 +1,6 @@
 # include "code/CodeObject.hpp"
 # include "object/HiInteger.hpp"
+# include "object/HiList.hpp"
 # include "object/HiString.hpp"
 # include "runtime/functionObject.hpp"
 # include "runtime/interpreter.hpp"
@@ -326,6 +327,14 @@ void Interpreter::eval_frame() {
                 PUSH(v->getattr(w));
                 break;
 
+            case ByteCode::BUILD_LIST:
+                v = new HiList();
+                while (op_arg--) {
+                    ((HiList*) v)->set(op_arg, POP());
+                }
+                PUSH(v);
+                break;
+                
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 

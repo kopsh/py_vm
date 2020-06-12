@@ -16,6 +16,9 @@ public:
     static const unsigned char LOAD_CONST = 100; // index in const list
     static const unsigned char LOAD_NAME = 101; // index in name list
 
+    static const unsigned char BUILD_LIST= 103; // index in name list
+    static const unsigned char BUILD_MAP = 105; // index in name list
+
     static const unsigned char LOAD_ATTR = 106; // index in name list
     static const unsigned char COMPARE_OF = 107; // compare operator
 
