@@ -14,6 +14,7 @@ private:
 public:
     static ListKlass* get_instance();
     virtual void print(HiObject* x);
+    virtual HiObject* subscr(HiObject* x, HiObject* y);
 };
 
 class HiList : public HiObject {

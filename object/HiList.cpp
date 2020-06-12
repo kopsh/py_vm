@@ -1,5 +1,6 @@
 # include <iostream>
 
+# include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
 
 ListKlass* ListKlass::instance = NULL;
@@ -40,4 +41,14 @@ void ListKlass::print(HiObject* x) {
         lx->get(i)->print();
     }
     printf("]");
+}
+
+HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == ListKlass::get_instance());
+    assert(y && y->klass() == IntegerKlass::get_instance());
+
+    HiList* lx = (HiList* ) x;
+    HiInteger* iy = (HiInteger* ) y;
+
+    return lx->get(iy->value());
 }

@@ -98,3 +98,13 @@ HiObject* string_upper(ObjList args) {
     delete[] v;
     return res; 
 }
+
+HiObject* StringKlass::subscr(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == StringKlass::get_instance());
+    assert(y && y->klass() == IntegerKlass::get_instance());
+
+    HiString* sx = (HiString* ) x;
+    HiInteger* iy = (HiInteger* ) y;
+
+    return new HiString(&(sx->value()[iy->value()]), 1);
+}

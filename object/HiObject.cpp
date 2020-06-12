@@ -54,6 +54,10 @@ HiObject* HiObject::len() {
     return klass()->len(this);
 }
 
+HiObject* HiObject::subscr(HiObject* x) {
+    return klass()->subscr(this, x);
+}
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* res = Universe::HiNone;
     res = klass()->klass_dict()->get(x);

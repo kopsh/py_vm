@@ -31,6 +31,7 @@ public:
     HiObject* le(HiObject *x);
 
     HiObject* len();
+    HiObject* subscr(HiObject* x);
     HiObject* getattr(HiObject* x);
 };
 

@@ -161,6 +161,12 @@ void Interpreter::eval_frame() {
                 w = POP();
                 PUSH(w->add(v));
                 break;
+            
+            case ByteCode::BINARY_SUBSCR:
+                v = POP();
+                w = POP();
+                PUSH(w->subscr(v));
+                break;
 
             case ByteCode::RETURN_VALUE:
                 _ret_value = POP();
@@ -334,7 +340,7 @@ void Interpreter::eval_frame() {
                 }
                 PUSH(v);
                 break;
-                
+
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 
