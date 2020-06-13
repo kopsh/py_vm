@@ -7,7 +7,7 @@ private:
     T*  _array;
     int _size;
 
-    void expand();
+    void resize(int new_size);
 
 
 public:
