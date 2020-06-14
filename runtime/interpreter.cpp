@@ -172,6 +172,13 @@ void Interpreter::eval_frame() {
                 PUSH(w->subscr(v));
                 break;
 
+            case ByteCode::STORE_SUBSCR:
+                u = POP();
+                v = POP();
+                w = POP();
+                v->store_subscr(u, w);
+                break;
+
             case ByteCode::RETURN_VALUE:
                 _ret_value = POP();
                 // leave_frame();

@@ -15,6 +15,7 @@ public:
     static ListKlass* get_instance();
     virtual void print(HiObject* x);
     virtual HiObject* subscr(HiObject* x, HiObject* y);
+    virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* contains_not(HiObject* x, HiObject* y);
 };
