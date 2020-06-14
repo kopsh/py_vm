@@ -44,7 +44,7 @@ ArrayList<T>::ArrayList(const ArrayList<T>* other) {
 
 template <typename T>
 void ArrayList<T>::resize(int new_size) {
-    if (new_size <= _length && new_size >= _length / 2)
+    if (new_size <= _length && (_length <=8 || new_size >= _length / 2))
         return;
 
     _length = (new_size >> 3) + (new_size < 9 ? 3 : 6);
