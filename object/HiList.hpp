@@ -38,4 +38,7 @@ public:
     HiObject* top() { return get(size()-1); }
 };
 
+HiObject* list_append(ObjList args);
+HiObject* list_insert(ObjList args);
+
 # endif

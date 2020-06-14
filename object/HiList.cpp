@@ -2,6 +2,8 @@
 
 # include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
+# include "object/HiString.hpp"
+# include "runtime/functionObject.hpp"
 # include "runtime/universe.hpp"
 
 ListKlass* ListKlass::instance = NULL;
@@ -14,7 +16,10 @@ ListKlass* ListKlass::get_instance() {
 }
 
 ListKlass::ListKlass() {
-
+    HiDict* klass_dict = new HiDict();
+    klass_dict->put(new HiString("append"), new FunctionObject(list_append));
+    klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
+    set_klass_dict(klass_dict);
 }
 
 HiList::HiList() {
@@ -78,4 +83,14 @@ HiObject* ListKlass::contains_not(HiObject* x, HiObject* y) {
             return Universe::HiFalse;
     }
     return Universe::HiTrue;
+}
+
+HiObject* list_append(ObjList args) {
+    ((HiList*) args->get(0))->append(args->get(1));
+    return (HiObject*) Universe::HiNone;
+}
+
+HiObject* list_insert(ObjList args) {
+    ((HiList*) args->get(0))->insert(((HiInteger*) args->get(1))->value(), args->get(2));
+    return (HiObject*) Universe::HiNone;
 }

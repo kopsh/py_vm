@@ -102,7 +102,11 @@ void Interpreter::eval_frame() {
         HiObject *u, *w, *v, *attr;
 
         switch (op_code)
-        {
+        {   
+            case ByteCode::POP_TOP:
+                POP();
+                break;
+
             case ByteCode::LOAD_CONST:
                 PUSH(_frame->consts()->get(op_arg));
                 break;
