@@ -20,6 +20,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new HiString("append"), new FunctionObject(list_append));
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
     klass_dict->put(new HiString("index"), new FunctionObject(list_index));
+    klass_dict->put(new HiString("pop"), new FunctionObject(list_pop));
     set_klass_dict(klass_dict);
 }
 
@@ -117,4 +118,9 @@ HiObject* list_index(ObjList args) {
         }
     }
     return Universe::HiNone;
+}
+
+HiObject* list_pop(ObjList args) {
+    HiList* list = (HiList*) (args->get(0));
+    return list->pop();
 }
