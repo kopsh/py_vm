@@ -41,5 +41,6 @@ public:
 
 HiObject* list_append(ObjList args);
 HiObject* list_insert(ObjList args);
+HiObject* list_index(ObjList args);
 
 # endif

@@ -19,6 +19,7 @@ ListKlass::ListKlass() {
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("append"), new FunctionObject(list_append));
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
+    klass_dict->put(new HiString("index"), new FunctionObject(list_index));
     set_klass_dict(klass_dict);
 }
 
@@ -104,4 +105,16 @@ HiObject* list_append(ObjList args) {
 HiObject* list_insert(ObjList args) {
     ((HiList*) args->get(0))->insert(((HiInteger*) args->get(1))->value(), args->get(2));
     return (HiObject*) Universe::HiNone;
+}
+
+HiObject* list_index(ObjList args) {
+    HiList* list = (HiList*) (args->get(0));
+    HiObject* target = args->get(1);
+
+    for (int i=0; i < list->size(); i++) {
+        if (list->get(i)->equal(target) == Universe::HiTrue) {
+            return new HiInteger(i);
+        }
+    }
+    return Universe::HiNone;
 }
