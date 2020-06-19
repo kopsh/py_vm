@@ -22,6 +22,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new HiString("index"), new FunctionObject(list_index));
     klass_dict->put(new HiString("pop"), new FunctionObject(list_pop));
     klass_dict->put(new HiString("remove"), new FunctionObject(list_remove));
+    klass_dict->put(new HiString("reverse"), new FunctionObject(list_reverse));
     set_klass_dict(klass_dict);
 }
 
@@ -144,6 +145,23 @@ HiObject* list_remove(ObjList args) {
             list->delete_index(i);
             break;
         }
+    }
+    return Universe::HiNone;
+}
+
+HiObject* list_reverse(ObjList args) {
+    HiList* list = (HiList*) (args->get(0));
+    HiObject *a, *b;
+
+    int l = 0;
+    int r = list->size()-1;
+    while (l < r) {
+        a = list->inner_list()->get(l);
+        b = list->inner_list()->get(r);
+        list->set(l, b);
+        list->set(r, a);
+        l++;
+        r--;
     }
     return Universe::HiNone;
 }
