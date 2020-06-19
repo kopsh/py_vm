@@ -35,6 +35,7 @@ public:
     virtual HiObject* len(HiObject* x) {return 0;}
     virtual HiObject* subscr(HiObject* x, HiObject* y) {return 0;}
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z) {return;}
+    virtual void delete_subscr(HiObject* x, HiObject* y) {return;}
     virtual HiObject* contains(HiObject* x, HiObject* y) {return 0;}
     virtual HiObject* contains_not(HiObject* x, HiObject* y) {return 0;}
 };

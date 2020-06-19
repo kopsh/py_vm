@@ -68,9 +68,18 @@ void ListKlass::store_subscr(HiObject* x, HiObject* y, HiObject* z) {
     HiList* lx = (HiList* ) x;
     HiInteger* iy = (HiInteger* ) y;
 
-    return lx->set(iy->value(), z);
+    lx->set(iy->value(), z);
 }
 
+void ListKlass::delete_subscr(HiObject* x, HiObject* y) {
+    assert(x && x->klass() == ListKlass::get_instance());
+    assert(y && y->klass() == IntegerKlass::get_instance());
+
+    HiList* lx = (HiList* ) x;
+    HiInteger* iy = (HiInteger* ) y;
+
+    lx->delete_index(iy->value());
+}
 
 HiObject* ListKlass::contains(HiObject* x, HiObject* y) {
     assert(x && x->klass() == ListKlass::get_instance());

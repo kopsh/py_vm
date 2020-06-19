@@ -33,6 +33,7 @@ public:
     HiObject* len();
     HiObject* subscr(HiObject* x);
     void store_subscr(HiObject* x, HiObject* y);
+    void delete_subscr(HiObject* x);
     HiObject* getattr(HiObject* x);
     HiObject* contains(HiObject* x);
     HiObject* contains_not(HiObject* x);

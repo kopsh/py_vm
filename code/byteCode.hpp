@@ -5,6 +5,7 @@ public:
     static const unsigned char BINARY_ADD = 23;
     static const unsigned char BINARY_SUBSCR = 25;
     static const unsigned char STORE_SUBSCR = 60;
+    static const unsigned char DELETE_SUBSCR = 61;
 
     static const unsigned char PRINT_ITEM = 71;
     static const unsigned char PRINT_NEWLINE = 72;

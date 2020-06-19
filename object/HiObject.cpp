@@ -62,6 +62,10 @@ void HiObject::store_subscr(HiObject* x, HiObject* y) {
     klass()->store_subscr(this, x, y);
 }
 
+void HiObject::delete_subscr(HiObject* x) {
+    klass()->delete_subscr(this, x);
+}
+
 HiObject* HiObject::contains(HiObject* x) {
     return klass()->contains(this, x);
 }

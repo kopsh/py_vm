@@ -16,6 +16,7 @@ public:
     virtual void print(HiObject* x);
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
+    virtual void delete_subscr(HiObject* x, HiObject* y);
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* contains_not(HiObject* x, HiObject* y);
 };
@@ -37,10 +38,12 @@ public:
     void set(int i, HiObject* obj) { _inner_list->set(i, obj); }
     void insert(int i, HiObject* obj) { _inner_list->insert(i, obj); }
     HiObject* top() { return get(size()-1); }
+    void delete_index(int i) { _inner_list->delete_index(i); }
 };
 
 HiObject* list_append(ObjList args);
 HiObject* list_insert(ObjList args);
 HiObject* list_index(ObjList args);
+HiObject* list_pop(ObjList args);
 
 # endif
