@@ -23,6 +23,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new HiString("pop"), new FunctionObject(list_pop));
     klass_dict->put(new HiString("remove"), new FunctionObject(list_remove));
     klass_dict->put(new HiString("reverse"), new FunctionObject(list_reverse));
+    klass_dict->put(new HiString("sort"), new FunctionObject(list_sort));
     set_klass_dict(klass_dict);
 }
 
@@ -164,4 +165,39 @@ HiObject* list_reverse(ObjList args) {
         r--;
     }
     return Universe::HiNone;
+}
+
+HiObject* list_sort(ObjList args) {
+    HiList* list = (HiList*) (args->get(0));
+    quicksort(list->inner_list(), 0, list->size()-1);
+    return Universe::HiNone;
+}
+
+void quicksort(ArrayList<HiObject*>* list, int left, int right) {
+    if (left >= right)
+        return;
+
+    int pos = partition(list, left, right);
+    printf("%d", pos);
+    quicksort(list, left, pos-1);
+    quicksort(list, pos+1, right);
+}
+
+int partition(ArrayList<HiObject*>* list, int left, int right) {
+    HiObject* pivot = list->get(left);
+    int j = left+1;
+    
+    for (int i=left+1; i <= right; i++) {
+        if (list->get(i)->le(pivot) == Universe::HiTrue) {
+            swap(list, i, j++);
+        }
+    }
+    swap(list, left, j-1);
+    return j-1;
+}
+
+void swap(ArrayList<HiObject*>* list, int i, int j) {
+    HiObject* a = list->get(i);
+    list->set(i, list->get(j));
+    list->set(j, a);
 }

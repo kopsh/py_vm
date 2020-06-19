@@ -12,6 +12,7 @@ ADD_EXECUTABLE(pyvm main.cpp
     object/HiList.cpp
     object/HiObject.cpp
     object/HiString.cpp
+    object/Klass.cpp
     runtime/frameObject.cpp
     runtime/functionObject.cpp
     runtime/interpreter.cpp

@@ -61,6 +61,36 @@ HiObject* StringKlass::equal(HiObject* x, HiObject* y) {
     return Universe::HiTrue;
 }
 
+HiObject* StringKlass::less(HiObject* x, HiObject* y) {
+     if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
+            return Universe::HiTrue;
+        else
+            return Universe::HiFalse;
+    }
+
+    HiString* sx = (HiString* ) x;
+    HiString* sy = (HiString* ) y;
+
+    assert(sx && sx->klass() == (Klass* )this);
+    assert(sy && sy->klass() == (Klass* )this);
+
+    int len = sx->length() < sy->length() ? sx->length() : sy->length();
+
+
+    for (int i=0; i < len; i++) {
+        if (sx->value()[i] < sy->value()[i])
+            return Universe::HiTrue;
+        if (sx->value()[i] > sy->value()[i])
+            return Universe::HiFalse;
+    }
+
+    if (sx->length() < sy->length())
+        return Universe::HiTrue;
+
+    return Universe::HiFalse;
+}
+
 void StringKlass::print(HiObject* obj) {
     HiString* sobj = (HiString* )obj;
     assert(sobj && sobj->klass() == (Klass*) this);

@@ -47,8 +47,12 @@ HiObject* IntegerKlass::greater(HiObject* x, HiObject* y) {
 }
 
 HiObject* IntegerKlass::less(HiObject* x, HiObject* y) {
-    if (x->klass() != y->klass())
-        return Universe::HiFalse;
+    if (x->klass() != y->klass()) {
+        if (Klass::compare_klass(x->klass(), y->klass()) < 0)
+            return Universe::HiTrue;
+        else
+            return Universe::HiFalse;
+    }
 
     HiInteger* ix = (HiInteger* ) x;
     HiInteger* iy = (HiInteger* ) y;

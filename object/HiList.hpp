@@ -47,5 +47,10 @@ HiObject* list_index(ObjList args);
 HiObject* list_pop(ObjList args);
 HiObject* list_remove(ObjList args);
 HiObject* list_reverse(ObjList args);
+HiObject* list_sort(ObjList args);
+
+void quicksort(ObjList list, int left, int right);
+int partition(ObjList list, int left, int right);
+void swap(ObjList list, int i, int j);
 
 # endif
