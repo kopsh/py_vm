@@ -21,6 +21,7 @@ ListKlass::ListKlass() {
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
     klass_dict->put(new HiString("index"), new FunctionObject(list_index));
     klass_dict->put(new HiString("pop"), new FunctionObject(list_pop));
+    klass_dict->put(new HiString("remove"), new FunctionObject(list_remove));
     set_klass_dict(klass_dict);
 }
 
@@ -132,4 +133,17 @@ HiObject* list_index(ObjList args) {
 HiObject* list_pop(ObjList args) {
     HiList* list = (HiList*) (args->get(0));
     return list->pop();
+}
+
+HiObject* list_remove(ObjList args) {
+    HiList* list = (HiList*) (args->get(0));
+    HiObject* target = args->get(1);
+
+    for (int i=0; i < list->size(); i++) {
+        if (list->get(i)->equal(target) == Universe::HiTrue) {
+            list->delete_index(i);
+            break;
+        }
+    }
+    return Universe::HiNone;
 }
