@@ -19,6 +19,7 @@ public:
     virtual void delete_subscr(HiObject* x, HiObject* y);
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* contains_not(HiObject* x, HiObject* y);
+    virtual HiObject* iter(HiObject* x);
 };
 
 class HiList : public HiObject {
@@ -41,6 +42,27 @@ public:
     void delete_index(int i) { _inner_list->delete_index(i); }
 };
 
+class ListIteratorKlass : public Klass {
+private:
+    static ListIteratorKlass* instance;
+    ListIteratorKlass();
+
+public:
+    static ListIteratorKlass* get_instance();
+};
+
+class ListIterator : public HiObject {
+private:
+    HiList* _owner;
+    int _iter_cnt;
+
+public:
+    ListIterator(HiList* owner);
+    HiList* owner() {return _owner;}
+    int iter_cnt() {return _iter_cnt;}
+    void inc_cnt() {_iter_cnt++;}
+};
+
 HiObject* list_append(ObjList args);
 HiObject* list_insert(ObjList args);
 HiObject* list_index(ObjList args);
@@ -52,5 +74,7 @@ HiObject* list_sort(ObjList args);
 void quicksort(ObjList list, int left, int right);
 int partition(ObjList list, int left, int right);
 void swap(ObjList list, int i, int j);
+
+HiObject* listiterator_next(ObjList args);
 
 # endif

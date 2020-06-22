@@ -22,6 +22,7 @@ public:
     int  length();
     T    pop();
     void delete_index(int index);
+    T    top();
 
     ~ArrayList() {
         delete[] _array;

@@ -124,6 +124,11 @@ void ArrayList<T>::delete_index(int index) {
     resize(--_size);
 }
 
+template <typename T>
+T ArrayList<T>::top() {
+    return _array[_size-1];
+}
+
 class HiObject;
 template class ArrayList<HiObject*>;
 

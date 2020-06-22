@@ -110,6 +110,17 @@ HiObject* ListKlass::contains_not(HiObject* x, HiObject* y) {
     return Universe::HiTrue;
 }
 
+HiObject* ListKlass::iter(HiObject* x) {
+    assert(x && x->klass() == ListKlass::get_instance());
+
+    HiList* lx = (HiList* ) x;
+    return new ListIterator(lx);
+}
+
+/*
+    list klass_dict functions
+*/
+
 HiObject* list_append(ObjList args) {
     ((HiList*) args->get(0))->append(args->get(1));
     return (HiObject*) Universe::HiNone;
@@ -173,6 +184,9 @@ HiObject* list_sort(ObjList args) {
     return Universe::HiNone;
 }
 
+/* 
+    list sort functions
+*/
 void quicksort(ArrayList<HiObject*>* list, int left, int right) {
     if (left >= right)
         return;
@@ -200,4 +214,44 @@ void swap(ArrayList<HiObject*>* list, int i, int j) {
     HiObject* a = list->get(i);
     list->set(i, list->get(j));
     list->set(j, a);
+}
+
+/*
+    ListIteratorKlass and ListIterator
+*/
+
+ListIteratorKlass* ListIteratorKlass::instance = NULL;
+
+ListIteratorKlass* ListIteratorKlass::get_instance() {
+    if (instance == NULL)
+        instance = new ListIteratorKlass();
+    return instance;
+}
+
+ListIteratorKlass::ListIteratorKlass() {
+    HiDict* _klass_dict = new HiDict();
+    _klass_dict->put(new HiString("next"), new FunctionObject(listiterator_next));
+    set_klass_dict(_klass_dict);
+
+    set_name(new HiString("listiterator"));
+}
+
+ListIterator::ListIterator(HiList* owner) {
+    _owner = owner;
+    _iter_cnt = 0;
+    set_klass(ListIteratorKlass::get_instance());
+}
+
+HiObject* listiterator_next(ObjList args) {
+    ListIterator* iter = (ListIterator*) (args->get(0));
+
+    HiList* list = iter->owner();
+    int iter_cnt = iter->iter_cnt();
+    if (iter_cnt < list->size()) {
+        HiObject* obj = list->get(iter_cnt);
+        iter->inc_cnt();
+        return obj;
+    }
+    else // TODO : we need StopIteration here to mask iteration end
+        return NULL;
 }

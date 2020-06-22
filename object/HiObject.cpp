@@ -74,6 +74,10 @@ HiObject* HiObject::contains_not(HiObject* x) {
     return klass()->contains_not(this, x);
 }
 
+HiObject* HiObject::iter() {
+    return klass()->iter(this);
+}
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* res = Universe::HiNone;
     res = klass()->klass_dict()->get(x);
