@@ -377,8 +377,7 @@ void Interpreter::eval_frame() {
 
             case ByteCode::FOR_ITER:
                 v = TOP();
-                w = v->getattr(new HiString("next"));
-                build_frame(w, NULL);
+                PUSH(v->next());
 
                 if (TOP() == NULL) {
                     _frame->_pc += op_arg;

@@ -41,6 +41,7 @@ public:
     virtual HiObject* contains_not(HiObject* x, HiObject* y) {return 0;}
 
     virtual HiObject* iter(HiObject* x) {return 0;}
+    virtual HiObject* next(HiObject* x) {return 0;}
 };
 
 # endif

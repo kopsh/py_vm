@@ -82,6 +82,11 @@ HiObject* HiObject::iter() {
     return klass()->iter(this);
 }
 
+HiObject* HiObject::next() {
+    return klass()->next(this);
+}
+
+
 HiObject* HiObject::getattr(HiObject* x) {
     HiObject* res = Universe::HiNone;
     res = klass()->klass_dict()->get(x);

@@ -37,7 +37,9 @@ public:
     void delete_subscr(HiObject* x);
     HiObject* contains(HiObject* x);
     HiObject* contains_not(HiObject* x);
+
     HiObject* iter();
+    HiObject* next();
 
     HiObject* getattr(HiObject* x);
 };
