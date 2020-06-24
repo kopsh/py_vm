@@ -47,6 +47,14 @@ K Map<K, V>::get_key(int index) {
 }
 
 template <typename K, typename V>
+V Map<K, V>::get_value(int index) {
+    if (index >=0 and index < _size)
+        return _entries[index]._v;
+    
+    return Universe::HiNone;
+}
+
+template <typename K, typename V>
 bool Map<K, V>::has_key(K k) {
     int i = index(k);
     return i >= 0;
