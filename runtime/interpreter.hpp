@@ -25,22 +25,5 @@ public:
     void destory_frame();
 };
 
-class StringTable {
-private:
-    static StringTable* instance;
-    StringTable() {
-        next_str = new HiString("next");
-    };
-
-public:
-    static StringTable* get_instance() {
-        if (instance == NULL) {
-            instance = new StringTable();
-        }
-        return instance;
-    }
-    
-    HiString* next_str;
-};
 
 # endif

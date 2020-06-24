@@ -8,6 +8,7 @@
 # include "runtime/universe.hpp"
 # include "util/ArrayList.hpp"
 # include "util/Map.hpp"
+# include "util/StringTable.hpp"
 
 # include <string.h>
 # include <iostream>
