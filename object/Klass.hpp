@@ -1,10 +1,9 @@
 # ifndef KLASS_HPP
 # define KLASS_HPP
 
-# include "util/Map.hpp"
-
 class HiObject;
 class HiString;
+class HiDict;
 
 class Klass {
 private:

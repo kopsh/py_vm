@@ -13,7 +13,7 @@ private:
     FrameObject* _frame;
     HiObject* _ret_value;
 
-    Map<HiObject*, HiObject*>* _builtins; // 只需维护一份builtin变量表
+    HiDict* _builtins; // 只需维护一份builtin变量表
 
 public:
     static Interpreter* get_instance();

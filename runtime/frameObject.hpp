@@ -2,8 +2,8 @@
 # define FRAMEOBJECT_HPP
 
 # include "code/CodeObject.hpp"
+# include "object/HiDict.hpp"
 # include "util/ArrayList.hpp"
-# include "util/Map.hpp"
 
 class Block {
 public:
@@ -40,8 +40,8 @@ public:
     ObjList _consts;
     ObjList _names;
 
-    Map<HiObject*, HiObject*>* _locals;
-    Map<HiObject*, HiObject*>* _globals;
+    HiDict* _locals;
+    HiDict* _globals;
     ObjList _fast_locals;
 
     CodeObject* _codes;
@@ -58,8 +58,8 @@ public:
     ObjList names() {return _names;}
     ObjList consts() {return _consts;}
 
-    Map<HiObject*, HiObject*>* locals() {return _locals;}
-    Map<HiObject*, HiObject*>* globals() {return _globals;}
+    HiDict* locals() {return _locals;}
+    HiDict* globals() {return _globals;}
 
     bool has_more_codes();
     unsigned char get_op_code();

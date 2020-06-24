@@ -53,7 +53,7 @@ private:
         因此，functionObject需要自己的globals表
     */
     
-    Map<HiObject*, HiObject*>* _globals;
+    HiDict* _globals;
     ObjList _defaults;
     NativeFuncPointer _native_func; // 函数指针, 指向要实现的native函数
 
@@ -73,8 +73,8 @@ public:
     }
 
     HiString* func_name() {return _func_name;}
-    void set_globals(Map<HiObject*, HiObject*>* x) {_globals = x;}
-    Map<HiObject*, HiObject*>* globals() {return _globals;}
+    void set_globals(HiDict* x) {_globals = x;}
+    HiDict* globals() {return _globals;}
     int flags() {return _flags;}
     void set_defaults(ObjList x);
     ObjList defaults() {return _defaults;}

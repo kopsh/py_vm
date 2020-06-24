@@ -1,4 +1,5 @@
 # include "code/CodeObject.hpp"
+# include "object/HiDict.hpp"
 # include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
 # include "object/HiString.hpp"
@@ -33,7 +34,7 @@ Interpreter* Interpreter::get_instance() {
 Interpreter::Interpreter() {
     _frame = NULL;
 
-    _builtins = new Map<HiObject*, HiObject*>();
+    _builtins = new HiDict();
 
     _builtins->put(new HiString("True"), HI_TRUE);
     _builtins->put(new HiString("False"), HI_FALSE);
@@ -381,6 +382,18 @@ void Interpreter::eval_frame() {
                     _frame->_pc += op_arg;
                     POP();
                 }
+                break;
+
+            case ByteCode::BUILD_MAP:
+                v = new HiDict();
+                PUSH(v);
+                break;
+
+            case ByteCode::STORE_MAP:
+                w = POP();
+                v = POP();
+                u = TOP();
+                ((HiDict*) u)->put(w, v);
                 break;
 
             default:

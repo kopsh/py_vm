@@ -34,6 +34,6 @@ public:
 };
 
 class HiObject;
-typedef Map<HiObject*, HiObject*> HiDict;
+typedef Map<HiObject*, HiObject*>* ObjMap;
 
 # endif
