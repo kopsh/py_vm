@@ -16,6 +16,10 @@ ListKlass* ListKlass::get_instance() {
 }
 
 ListKlass::ListKlass() {
+
+}
+
+void ListKlass::initialize() {
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("append"), new FunctionObject(list_append));
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));

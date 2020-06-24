@@ -1,4 +1,6 @@
+# include "object/HiDict.hpp"
 # include "object/HiInteger.hpp"
+# include "object/HiList.hpp"
 # include "object/HiString.hpp"
 # include "runtime/universe.hpp"
 # include "runtime/functionObject.hpp"
@@ -14,10 +16,9 @@ void Universe::genesis() {
     HiFalse = new HiInteger(0);
     HiNone = new HiObject();
 
-    // initialize StringKlass
-    HiDict* klass_dict = new HiDict();
-    StringKlass::get_instance()->set_klass_dict(klass_dict);
-    klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
+    DictKlass::get_instance()->initialize();
+    ListKlass::get_instance()->initialize();
+    StringKlass::get_instance()->initialize();
 }
 
 void Universe::destory() {

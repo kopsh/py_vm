@@ -1,4 +1,6 @@
-# include "HiString.hpp"
+# include "object/HiDict.hpp"
+# include "object/HiString.hpp"
+# include "runtime/functionObject.hpp"
 # include "runtime/universe.hpp"
 # include "util/ArrayList.hpp"
 
@@ -12,6 +14,12 @@ StringKlass* StringKlass::get_instance() {
         instance = new StringKlass();
 
     return instance;
+}
+
+void StringKlass::initialize() {
+    HiDict* klass_dict = new HiDict();
+    klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
+    set_klass_dict(klass_dict);
 }
 
 HiString::HiString(const char * x) {
