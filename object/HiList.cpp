@@ -49,13 +49,17 @@ void ListKlass::print(HiObject* x) {
 
     int size = lx->size();
     if (size >= 1) {
-        lx->get(0)->print();
+        lx->get(0)->repr();
     }
     for (int i=1; i < size; i++) {
         printf(",");
-        lx->get(i)->print();
+        lx->get(i)->repr();
     }
     printf("]");
+}
+
+void ListKlass::repr(HiObject* x) {
+    x->print();
 }
 
 HiObject* ListKlass::subscr(HiObject* x, HiObject* y) {

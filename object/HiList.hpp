@@ -16,6 +16,7 @@ public:
     void initialize();
 
     virtual void print(HiObject* x);
+    virtual void repr(HiObject* x);
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
     virtual void delete_subscr(HiObject* x, HiObject* y);

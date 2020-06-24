@@ -17,6 +17,7 @@ public:
     void set_klass(Klass* x) {_klass = x;}
 
     void print();
+    void repr();
     HiObject* add(HiObject* x);
     HiObject* sub(HiObject* x);
     HiObject* mul(HiObject* x);

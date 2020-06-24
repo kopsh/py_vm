@@ -14,6 +14,7 @@ public:
     void initialize();
 
     virtual void print(HiObject* obj);
+    virtual void repr(HiObject* obj);
     virtual HiObject* equal(HiObject* x, HiObject* y);
     virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* len(HiObject* x);

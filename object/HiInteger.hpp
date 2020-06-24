@@ -13,6 +13,7 @@ public:
     static IntegerKlass* get_instance();
 
     virtual void print(HiObject* obj);
+    virtual void repr(HiObject* obj);
     virtual HiObject* greater(HiObject* x, HiObject* y);
     virtual HiObject* less(HiObject* x, HiObject* y);
     virtual HiObject* equal(HiObject* x, HiObject* y);

@@ -18,7 +18,8 @@ public:
     HiDict* klass_dict() {return _klass_dict;}
     static int compare_klass(Klass* x, Klass* y);
 
-    virtual void print(HiObject* obj) {};
+    virtual void print(HiObject* obj) {}
+    virtual void repr(HiObject* obj) {}
     virtual HiObject* greater(HiObject* x, HiObject* y) {return 0;}
     virtual HiObject* less(HiObject* x, HiObject* y) {return 0;}
     virtual HiObject* equal(HiObject* x, HiObject* y) {return 0;}

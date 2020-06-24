@@ -15,10 +15,12 @@ public:
     static DictKlass* get_instance();
     void initialize();
 
-    // virtual HiObject* subscr(HiObject* x, HiObject* y);
+    virtual HiObject* subscr(HiObject* x, HiObject* y);
     // virtual HiObject* iter(HiObject* x);
-    // virtual void print(HiObject* x);
-    // virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
+    virtual void print(HiObject* x);
+    virtual void repr(HiObject* x);
+    virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
+    virtual void delete_subscr(HiObject*, HiObject*);
 
 };
 

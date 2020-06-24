@@ -107,6 +107,16 @@ void StringKlass::print(HiObject* obj) {
         printf("%c", sobj->value()[i]);
 }
 
+void StringKlass::repr(HiObject* obj) {
+    HiString* sobj = (HiString* )obj;
+    assert(sobj && sobj->klass() == (Klass*) this);
+
+    printf("\'");
+    sobj->print();
+    printf("\'");
+}
+
+
 HiObject* StringKlass::len(HiObject* x) {
     return new HiInteger(((HiString* )x)->length());
 }

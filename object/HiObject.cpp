@@ -6,6 +6,10 @@ void HiObject::print() {
     klass()->print(this);
 }
 
+void HiObject::repr() {
+    klass()->repr(this);
+}
+
 HiObject* HiObject::greater(HiObject* rhs) {
     return klass()->greater(this, rhs);
 }

@@ -30,6 +30,12 @@ void IntegerKlass::print(HiObject* x) {
     printf("%d", ix->value());
 }
 
+void IntegerKlass::repr(HiObject* x) {
+    HiInteger* ix = (HiInteger* ) x;
+
+    printf("%d", ix->value());
+}
+
 HiObject* IntegerKlass::greater(HiObject* x, HiObject* y) {
     if (x->klass() != y->klass())
         return Universe::HiFalse;
