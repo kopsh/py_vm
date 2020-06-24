@@ -238,9 +238,7 @@ ListIteratorKlass* ListIteratorKlass::get_instance() {
 
 ListIteratorKlass::ListIteratorKlass() {
     HiDict* _klass_dict = new HiDict();
-    _klass_dict->put(new HiString("next"), new FunctionObject(listiterator_next));
     set_klass_dict(_klass_dict);
-
     set_name(new HiString("listiterator"));
 }
 
@@ -250,14 +248,15 @@ ListIterator::ListIterator(HiList* owner) {
     set_klass(ListIteratorKlass::get_instance());
 }
 
-HiObject* listiterator_next(ObjList args) {
-    ListIterator* iter = (ListIterator*) (args->get(0));
+HiObject* ListIteratorKlass::next(HiObject* x) {
+    ListIterator* i = (ListIterator* ) x;
+    assert(i && i->klass() == (Klass*) this);
 
-    HiList* list = iter->owner();
-    int iter_cnt = iter->iter_cnt();
+    HiList* list = i->owner();
+    int iter_cnt = i->iter_cnt();
     if (iter_cnt < list->size()) {
         HiObject* obj = list->get(iter_cnt);
-        iter->inc_cnt();
+        i->inc_cnt();
         return obj;
     }
     else // TODO : we need StopIteration here to mask iteration end

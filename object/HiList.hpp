@@ -52,6 +52,7 @@ private:
 
 public:
     static ListIteratorKlass* get_instance();
+    virtual HiObject* next(HiObject* x);
 };
 
 class ListIterator : public HiObject {
