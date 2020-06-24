@@ -40,5 +40,6 @@ public:
 };
 
 HiObject* set_dict_default(ObjList args);
+HiObject* dict_pop(ObjList args);
 
 # endif

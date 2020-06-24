@@ -78,7 +78,7 @@ void Map<K, V>::expand() {
 template <typename K, typename V>
 V Map<K, V>::remove(K k) {
     int i = index(k);
-    if (i > 0) {
+    if (i >= 0) {
         V v = _entries[i]._v;
         _entries[i] = _entries[--_size];
         return v;
