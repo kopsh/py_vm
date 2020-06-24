@@ -3,12 +3,13 @@
 # include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
 # include "object/HiString.hpp"
+# include "runtime/IntegerTable.hpp"
+# include "runtime/StringTable.hpp"
 # include "runtime/functionObject.hpp"
 # include "runtime/interpreter.hpp"
 # include "runtime/universe.hpp"
 # include "util/ArrayList.hpp"
 # include "util/Map.hpp"
-# include "util/StringTable.hpp"
 
 # include <string.h>
 # include <iostream>
@@ -397,6 +398,13 @@ void Interpreter::eval_frame() {
                 ((HiDict*) u)->put(w, v);
                 break;
 
+            case ByteCode::UNPACK_SEQUENCE:
+                v = POP();
+
+                while (op_arg--) {
+                    PUSH(v->subscr(IntegerTable::get(op_arg)));
+                }
+                break;
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 

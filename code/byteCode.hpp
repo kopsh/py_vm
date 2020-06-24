@@ -21,6 +21,7 @@ public:
     static const unsigned char HAVE_ARGUMENT = 90; 
 
     static const unsigned char STORE_NAME = 90; // Index in name list
+    static const unsigned char UNPACK_SEQUENCE = 92; // number of the unpacked element
 
     static const unsigned char FOR_ITER = 93; // offset for _pc if iteration ends
 
