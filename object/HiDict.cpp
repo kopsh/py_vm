@@ -27,6 +27,7 @@ void DictKlass::initialize() {
     klass_dict->put(new HiString("setdefault"), new FunctionObject(set_dict_default));
     klass_dict->put(new HiString("pop"), new FunctionObject(dict_pop));
     klass_dict->put(new HiString("keys"), new FunctionObject(dict_keys));
+    klass_dict->put(new HiString("values"), new FunctionObject(dict_values));
     set_klass_dict(klass_dict);
 }
 
@@ -121,6 +122,15 @@ HiObject* dict_keys(ObjList args) {
     HiList* l = new HiList();
     for (int i=0; i < d->map()->size(); i++) {
         l->append(d->map()->get_key(i));
+    }
+    return l;
+}
+
+HiObject* dict_values(ObjList args) {
+    HiDict* d = (HiDict*) args->get(0);
+    HiList* l = new HiList();
+    for (int i=0; i < d->map()->size(); i++) {
+        l->append(d->map()->entries()[i]._v);
     }
     return l;
 }

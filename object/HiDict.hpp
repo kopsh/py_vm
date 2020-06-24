@@ -44,5 +44,6 @@ public:
 HiObject* set_dict_default(ObjList args);
 HiObject* dict_pop(ObjList args);
 HiObject* dict_keys(ObjList args);
+HiObject* dict_values(ObjList args);
 
 # endif
