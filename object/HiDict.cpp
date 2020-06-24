@@ -1,4 +1,5 @@
 # include "object/HiDict.hpp"
+# include "object/HiList.hpp"
 # include "object/HiString.hpp"
 # include "runtime/functionObject.hpp"
 # include "runtime/universe.hpp"
@@ -25,6 +26,7 @@ void DictKlass::initialize() {
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("setdefault"), new FunctionObject(set_dict_default));
     klass_dict->put(new HiString("pop"), new FunctionObject(dict_pop));
+    klass_dict->put(new HiString("keys"), new FunctionObject(dict_keys));
     set_klass_dict(klass_dict);
 }
 
@@ -112,4 +114,13 @@ HiObject* dict_pop(ObjList args) {
     else {
         return _default;
     }
+}
+
+HiObject* dict_keys(ObjList args) {
+    HiDict* d = (HiDict*) args->get(0);
+    HiList* l = new HiList();
+    for (int i=0; i < d->map()->size(); i++) {
+        l->append(d->map()->get_key(i));
+    }
+    return l;
 }
