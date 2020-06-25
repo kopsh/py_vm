@@ -54,6 +54,8 @@ FunctionObject::FunctionObject(NativeFuncPointer nfp) {
     _func_name = NULL;
     _flags = 0;
     _globals = NULL;
+    _defaults = NULL;
+    _closure = NULL;
     _native_func = nfp;
 
     set_klass(NativeFunctionKlass::get_instance());
@@ -81,6 +83,8 @@ FunctionObject::FunctionObject(HiObject* code_obj) {
     _func_name = co->_co_name;
     _flags = co->_flag;
     _defaults = NULL;
+    _globals = NULL;
+    _closure = NULL;
 
     set_klass(FunctionKlass::get_instance());
 }

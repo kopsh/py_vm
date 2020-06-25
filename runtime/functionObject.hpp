@@ -3,6 +3,7 @@
 
 # include "code/CodeObject.hpp"
 # include "object/Klass.hpp"
+# include "object/HiList.hpp"
 # include "runtime/frameObject.hpp"
 
 class FunctionKlass : public Klass {
@@ -56,6 +57,7 @@ private:
     HiDict* _globals; // 全局变量，函数定义时进行绑定
     ObjList _defaults; // 默认参数列表， def foo(a, b, c=1, d=2):pass
     NativeFuncPointer _native_func; // 函数指针, 指向要实现的native函数
+    HiList* _closure; // cell变量列表
 
     unsigned int _flags;
 
@@ -84,6 +86,8 @@ public:
     void set_defaults(ObjList x);
     ObjList defaults() {return _defaults;}
     HiObject* call(ObjList args);
+    HiList* closure() {return _closure;}
+    void set_closure(HiList* x) { _closure=x;}
 };
 
 class MethodKlass : public Klass {

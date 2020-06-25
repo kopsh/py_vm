@@ -3,6 +3,7 @@
 # include "object/HiInteger.hpp"
 # include "object/HiList.hpp"
 # include "object/HiString.hpp"
+# include "runtime/cellObject.hpp"
 # include "runtime/IntegerTable.hpp"
 # include "runtime/StringTable.hpp"
 # include "runtime/functionObject.hpp"
@@ -365,6 +366,7 @@ void Interpreter::eval_frame() {
                 PUSH(v->getattr(w));
                 break;
 
+            case ByteCode::BUILD_TUPLE:
             case ByteCode::BUILD_LIST:
                 v = new HiList();
                 while (op_arg--) {
@@ -407,6 +409,47 @@ void Interpreter::eval_frame() {
                     PUSH(v->subscr(IntegerTable::get(op_arg)));
                 }
                 break;
+
+            case ByteCode::STORE_DEREF:
+                _frame->_closure->set(op_arg, POP());
+                break;
+            
+            case ByteCode::LOAD_DEREF:
+                v = _frame->closure()->get(op_arg);
+                if (v->klass() == CellKlass::get_instance()) {
+                    v = ((CellObject*)v)->value();
+                }
+                PUSH(v);
+                break;
+
+            case ByteCode::LOAD_CLOSURE:
+                v = _frame->closure()->get(op_arg);
+                if (v != NULL) {
+                    PUSH(v);
+                    break;
+                }
+                PUSH(_frame->get_cell_from_parameter(op_arg));
+                break;
+
+            case ByteCode::MAKE_CLOSURE:
+                v = POP();
+                fo = new FunctionObject(v);
+                fo->set_closure((HiList*)(POP()));
+                fo->set_globals(_frame->globals());
+
+                if (op_arg > 0) {
+                    args = new ArrayList<HiObject*>(op_arg);
+                    while (op_arg--)
+                        args->set(op_arg, POP());
+                }
+                fo->set_defaults(args);
+
+                if (args != NULL)
+                    args = NULL;
+
+                PUSH(fo);
+                break;
+
             default:
                 printf("Error: Unrecognized byte code %d\n", op_code);
         } 

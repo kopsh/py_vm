@@ -14,6 +14,8 @@ FrameObject::FrameObject(CodeObject* codes) {
 
     _locals = new HiDict();
     _globals = _locals;
+    _fast_locals = NULL;
+    _closure = NULL;
 
     _codes = codes;
     _pc = 0;
@@ -33,7 +35,9 @@ FrameObject::FrameObject(FunctionObject* func, ObjList args, int op_arg) {
 
     _locals = new HiDict();
     _globals = func->_globals;
-    _fast_locals = new ArrayList<HiObject*>();
+    _fast_locals = new HiList();
+    _closure = NULL;
+
     const int argcnt = _codes->_argcount; // 参数个数，不包括扩张位置参数和扩展键参数
     const int na = op_arg & 0xff; // 实际传入的位置参数个数
     const int nk = op_arg >> 8; // 实际传入的键参数个数
@@ -101,7 +105,7 @@ FrameObject::FrameObject(FunctionObject* func, ObjList args, int op_arg) {
         kw_pos++;
     }
     else {
-        if (!alist) {
+        if (alist != NULL) {
             printf("takes more extend parameters!\n");
             assert(false);
         }
@@ -114,11 +118,30 @@ FrameObject::FrameObject(FunctionObject* func, ObjList args, int op_arg) {
         _fast_locals->set(kw_pos, adict);
     }
     else {
-        if (!adict) {
+        if (adict != NULL) {
             printf("takes more extend keyword parameters!\n");
             assert(false);
         }
     }
+    
+    // 打包cell变量（包括当前的cellvars和上层闭包打包好的cell变量）
+    ArrayList<HiObject*>* cells = _codes->_cell_vals;
+    if (cells && cells->size() > 0) {
+        _closure = new HiList();
+
+        for (int i = 0; i < cells->size(); i++) {
+            _closure->append(NULL); // 占位，通过STORE_DEREF进行赋值
+        }
+    }
+
+    if (func->closure() && func->closure()->size() > 0) {
+        if (_closure == NULL)
+            _closure = func->closure();
+        else {
+            _closure = (HiList*)_closure->add(func->closure());
+        }
+    }
+
 
     _pc = 0;
     _sender = NULL;
@@ -137,4 +160,10 @@ unsigned char FrameObject::get_op_code() {
 
 bool FrameObject::has_more_codes() {
     return _pc < _codes->_bytecodes->length();
+}
+
+HiObject* FrameObject::get_cell_from_parameter(int i) {
+    HiObject* cell_name = _codes->_cell_vals->get(i);
+    i = _codes->_var_names->index(cell_name);
+    return _fast_locals->get(i);
 }

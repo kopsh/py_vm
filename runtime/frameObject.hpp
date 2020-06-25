@@ -3,6 +3,7 @@
 
 # include "code/CodeObject.hpp"
 # include "object/HiDict.hpp"
+# include "object/HiList.hpp"
 # include "util/ArrayList.hpp"
 
 class Block {
@@ -42,7 +43,8 @@ public:
 
     HiDict* _locals;
     HiDict* _globals;
-    ObjList _fast_locals; // 参数列表
+    HiList* _fast_locals; // 参数列表
+    HiList* _closure; // 闭包
 
     CodeObject* _codes;
     int _pc;
@@ -60,6 +62,8 @@ public:
 
     HiDict* locals() {return _locals;}
     HiDict* globals() {return _globals;}
+    HiList* fast_locals() {return _fast_locals;}
+    HiList* closure() {return _closure;}
 
     bool has_more_codes();
     unsigned char get_op_code();
@@ -68,6 +72,8 @@ public:
     void set_sender(FrameObject* fo) {_sender = fo;}
     FrameObject* sender() {return _sender;}
     bool is_first_frame() {return _sender == NULL;}
+
+    HiObject* get_cell_from_parameter(int i);
 };
 
 # endif
