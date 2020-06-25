@@ -46,12 +46,12 @@ Interpreter::Interpreter() {
 }
 
 // 创建新的frameObject，由它维护新的运行状态
-void Interpreter::build_frame(HiObject* callable, ObjList args) {
+void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
     if (callable->klass() == NativeFunctionKlass::get_instance()) {
         PUSH(((FunctionObject* )callable)->call(args));
     }
     else if (callable->klass() == FunctionKlass::get_instance()) {
-        FrameObject* frame = new FrameObject((FunctionObject* ) callable, args);
+        FrameObject* frame = new FrameObject((FunctionObject* ) callable, args, op_arg);
         frame->set_sender(_frame);
         _frame = frame;
     }
@@ -60,7 +60,7 @@ void Interpreter::build_frame(HiObject* callable, ObjList args) {
         if (args == NULL)
             args = new ArrayList<HiObject*>(1);
         args->insert(0, mo->owner());
-        build_frame(mo->func(), args);
+        build_frame(mo->func(), args, op_arg + 1);
     }
 }
 
@@ -331,16 +331,19 @@ void Interpreter::eval_frame() {
             case ByteCode::CALL_FUNCTION: 
             /*
                 切换为新的frameObject，新的frameObject的sender指针指向调用它的frameObject
+                CALL_FUNCTION的op_arg代表参数个数，其中高8位代表键参数的个数，低8位代表位置参数的个数
             */ 
                 if (op_arg > 0) {
-                    args = new ArrayList<HiObject*>(op_arg);
-
-                    while (op_arg--) {
-                        args->set(op_arg, POP());
+                    int na = op_arg & 0xff; // 低8位代表位置参数的个数
+                    int nk = op_arg >> 8; // 高8位代表键参数的个数
+                    int arg_cnt = na + nk * 2;
+                    args = new ArrayList<HiObject*>(arg_cnt);
+                    while (arg_cnt--) {
+                        args->set(arg_cnt, POP());
                     }
                 }
 
-                build_frame(POP(), args);
+                build_frame(POP(), args, op_arg);
 
                 if (args != NULL) {
                     delete args;

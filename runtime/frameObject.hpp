@@ -32,7 +32,7 @@ class FunctionObject;
 class FrameObject {
 public:
     FrameObject(CodeObject* c);
-    FrameObject(FunctionObject* fo, ObjList args);
+    FrameObject(FunctionObject* fo, ObjList args, int op_arg);
 
     ObjList _stack;
     ArrayList<Block*>* _loop_stack;
@@ -42,7 +42,7 @@ public:
 
     HiDict* _locals;
     HiDict* _globals;
-    ObjList _fast_locals;
+    ObjList _fast_locals; // 参数列表
 
     CodeObject* _codes;
     int _pc;

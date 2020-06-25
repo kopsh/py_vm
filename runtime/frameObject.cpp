@@ -1,6 +1,9 @@
 # include "runtime/functionObject.hpp"
 # include "runtime/frameObject.hpp"
 # include "object/HiString.hpp"
+# include "object/HiList.hpp"
+
+# include <iostream>
 
 FrameObject::FrameObject(CodeObject* codes) {
     _consts = codes->_consts;
@@ -18,7 +21,9 @@ FrameObject::FrameObject(CodeObject* codes) {
     _sender = NULL;
 }
 
-FrameObject::FrameObject(FunctionObject* func, ObjList args) {
+FrameObject::FrameObject(FunctionObject* func, ObjList args, int op_arg) {
+    assert((args && op_arg != 0) || (!args && op_arg == 0));
+
     _codes = func->_func_code;
     _consts = _codes->_consts;
     _names = _codes->_names;
@@ -28,9 +33,23 @@ FrameObject::FrameObject(FunctionObject* func, ObjList args) {
 
     _locals = new HiDict();
     _globals = func->_globals;
-
     _fast_locals = new ArrayList<HiObject*>();
+    const int argcnt = _codes->_argcount; // 参数个数，不包括扩张位置参数和扩展键参数
+    const int na = op_arg & 0xff; // 实际传入的位置参数个数
+    const int nk = op_arg >> 8; // 实际传入的键参数个数
+    int kw_pos = argcnt;
 
+    /*
+     处理默认参数
+     def f(a, b, c=1, d=2):pass
+     
+     argcnt = 4 // 四个参数
+     default = [1,2] 
+     fast_locals = [NULL, NULL, 1, 2]
+
+     调用f(1, 2, 3)
+     fast_locals = [1, 2, 3, 2]
+    */
     if (func->defaults()) {
         int dft_cnt = func->defaults()->length();
         int arg_cnt = _codes->_argcount;
@@ -40,9 +59,65 @@ FrameObject::FrameObject(FunctionObject* func, ObjList args) {
         }
     }
 
-    if (args) {
-        for (int i=0; i < args->length(); i++)
+    HiList* alist = NULL; // 存储 *args
+    HiDict* adict = NULL; //     *kwargs
+    
+    if (argcnt < na) { // 存在*args, 即传入位置参数个数大于定义时用的位置参数个数
+        int i = 0;
+        for (; i < argcnt; i++)
             _fast_locals->set(i, args->get(i));
+
+        alist = new HiList();
+        for (; i < na; i++)
+            alist->append(args->get(i));
+    }
+    else {
+        for (int i=0; i < na; i++)
+            _fast_locals->set(i, args->get(i));
+    }
+
+    // 当传入的参数不在code对象的参数列表中时，表明它是**kwargs中的参数
+    for (int i=0; i < nk; i++) {
+        HiObject* k = args->get(na + i*2);
+        HiObject* v = args->get(na + i*2 + 1);
+
+        int index = _codes->_var_names->index(k);
+        if (index >= 0) {
+            _fast_locals->set(index, v);
+        }
+        else {
+            if (adict == NULL)
+                adict = new HiDict();
+            
+            adict->put(k, v);
+        }
+    }
+
+    if (_codes->_flag & FunctionObject::CO_VARARGS) {
+        if (alist == NULL) {
+            alist = new HiList();
+        }
+        _fast_locals->set(argcnt, alist);
+        kw_pos++;
+    }
+    else {
+        if (!alist) {
+            printf("takes more extend parameters!\n");
+            assert(false);
+        }
+    }
+
+    if (_codes->_flag & FunctionObject::CO_VARKEYWORDS) {
+        if (adict == NULL) {
+            adict = new HiDict();
+        }
+        _fast_locals->set(kw_pos, adict);
+    }
+    else {
+        if (!adict) {
+            printf("takes more extend keyword parameters!\n");
+            assert(false);
+        }
     }
 
     _pc = 0;

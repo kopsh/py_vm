@@ -53,13 +53,18 @@ private:
         因此，functionObject需要自己的globals表
     */
     
-    HiDict* _globals;
-    ObjList _defaults;
+    HiDict* _globals; // 全局变量，函数定义时进行绑定
+    ObjList _defaults; // 默认参数列表， def foo(a, b, c=1, d=2):pass
     NativeFuncPointer _native_func; // 函数指针, 指向要实现的native函数
 
     unsigned int _flags;
 
 public:
+    enum CO_FLAGS {
+        CO_VARARGS = 0x4,
+        CO_VARKEYWORDS = 0x8,
+    };
+
     FunctionObject(HiObject* code_object);
     FunctionObject(NativeFuncPointer nfp);
 

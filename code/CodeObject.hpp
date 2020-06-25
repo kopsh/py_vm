@@ -10,7 +10,7 @@ class ArrayList;
 
 class CodeObject : public HiObject {
 public:
-    int _argcount;
+    int _argcount; // 函数所接受的参数个数，不包括 *args 和 **kwargs
     int _nlocals;
     int _stacksize;
     int _flag;
