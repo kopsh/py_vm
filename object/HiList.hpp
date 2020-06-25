@@ -23,6 +23,7 @@ public:
     virtual HiObject* contains(HiObject* x, HiObject* y);
     virtual HiObject* contains_not(HiObject* x, HiObject* y);
     virtual HiObject* iter(HiObject* x);
+    virtual HiObject* add(HiObject* x, HiObject* y);
 };
 
 class HiList : public HiObject {
