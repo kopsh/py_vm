@@ -26,8 +26,18 @@ void DictKlass::initialize() {
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("setdefault"), new FunctionObject(set_dict_default));
     klass_dict->put(new HiString("pop"), new FunctionObject(dict_pop));
-    klass_dict->put(new HiString("keys"), new FunctionObject(dict_keys));
-    klass_dict->put(new HiString("values"), new FunctionObject(dict_values));
+
+    FunctionObject* func;
+    func = new FunctionObject(dict_iterkeys);
+    klass_dict->put(new HiString("keys"), func);
+    klass_dict->put(new HiString("iterkeys"), func);
+    func = new FunctionObject(dict_itervalues);
+    klass_dict->put(new HiString("values"), func);
+    klass_dict->put(new HiString("itervalues"), func);
+    func = new FunctionObject(dict_iteritems);
+    klass_dict->put(new HiString("items"), func);
+    klass_dict->put(new HiString("iteritems"), func);
+
     set_klass_dict(klass_dict);
 }
 
@@ -70,6 +80,15 @@ void DictKlass::delete_subscr(HiObject* x, HiObject* y) {
     assert(dx && dx->klass() == DictKlass::get_instance());
 
     dx->remove(x);
+}
+
+HiObject* DictKlass::iter(HiObject* x) {
+    HiDict* dx = (HiDict* ) x;
+    assert(dx && dx->klass() == DictKlass::get_instance());
+
+    HiObject* iter = new DictIterator(dx);
+    iter->set_klass(DictIteratorKlass<ITER_KEY>::get_instance());
+    return iter;
 }
 
 /***
@@ -117,20 +136,88 @@ HiObject* dict_pop(ObjList args) {
     }
 }
 
-HiObject* dict_keys(ObjList args) {
-    HiDict* d = (HiDict*) args->get(0);
-    HiList* l = new HiList();
-    for (int i=0; i < d->map()->size(); i++) {
-        l->append(d->map()->get_key(i));
-    }
-    return l;
+/***
+ * 
+ * DictIterator and DictIteratorKlass
+ * 
+***/
+DictIterator::DictIterator(HiDict* owner) {
+    _owner = owner;
+    _iter_cnt = 0;
 }
 
-HiObject* dict_values(ObjList args) {
-    HiDict* d = (HiDict*) args->get(0);
-    HiList* l = new HiList();
-    for (int i=0; i < d->map()->size(); i++) {
-        l->append(d->map()->entries()[i]._v);
+template <ITER_TYPE n>
+DictIteratorKlass<n>* DictIteratorKlass<n>::instance = NULL;
+
+template<ITER_TYPE n>
+DictIteratorKlass<n>* DictIteratorKlass<n>::get_instance() {
+    if (instance == NULL) {
+        instance = new DictIteratorKlass<n>();
     }
-    return l;
+
+    return instance;
+}
+
+template <ITER_TYPE iter_type>
+DictIteratorKlass<iter_type>::DictIteratorKlass() {
+    const char* names[] = {
+        "dict_keyiterator",
+        "dict_valueiterator",
+        "dict_itemiterator"
+    };
+    HiDict* klass_dict = new HiDict();
+    set_klass_dict(klass_dict);
+    set_name(new HiString(names[iter_type]));
+}
+
+template <ITER_TYPE iter_type>
+HiObject* DictIteratorKlass<iter_type>::next(HiObject* x) {
+    DictIterator* i = (DictIterator* ) x;
+
+    int iter_cnt = i->iter_cnt();
+    HiObject* obj;
+    if (iter_cnt < i->owner()->size()) {
+        switch (iter_type)
+        {
+            case ITER_KEY:
+                obj = i->owner()->map()->get_key(iter_cnt);
+                break;
+                
+            case ITER_VALUE:
+                obj = i->owner()->map()->get_value(iter_cnt);
+                break;
+
+            case ITER_ITEM:
+                HiList* lobj = new HiList();
+                lobj->append(i->owner()->map()->get_key(iter_cnt));
+                lobj->append(i->owner()->map()->get_value(iter_cnt));
+                obj = lobj;
+                break;
+        }
+        i->inc_cnt();
+        return obj;
+    }
+    else
+        return NULL;
+}
+
+HiObject* dict_iterkeys(ObjList args) {
+    HiDict* d = (HiDict*) args->get(0);
+    HiObject* iter = new DictIterator(d);
+    iter->set_klass(DictIteratorKlass<ITER_KEY>::get_instance());
+    return iter;
+}
+
+HiObject* dict_itervalues(ObjList args) {
+    HiDict* d = (HiDict*) args->get(0);
+    HiObject* iter = new DictIterator(d);
+    iter->set_klass(DictIteratorKlass<ITER_VALUE>::get_instance());
+    return iter;
+}
+
+HiObject* dict_iteritems(ObjList args) {
+    HiDict* d = (HiDict*) args->get(0);
+    HiObject* iter = new DictIterator(d);
+    iter->set_klass(DictIteratorKlass<ITER_ITEM>::get_instance());
+    return iter;
 }

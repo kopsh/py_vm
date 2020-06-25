@@ -16,7 +16,7 @@ public:
     void initialize();
 
     virtual HiObject* subscr(HiObject* x, HiObject* y);
-    // virtual HiObject* iter(HiObject* x);
+    virtual HiObject* iter(HiObject* x);
     virtual void print(HiObject* x);
     virtual void repr(HiObject* x);
     virtual void store_subscr(HiObject* x, HiObject* y, HiObject* z);
@@ -41,9 +41,40 @@ public:
     int size() { return _map->size(); }
 };
 
+class DictIterator : public HiObject {
+private:
+    HiDict* _owner;
+    int _iter_cnt;
+
+public:
+    DictIterator(HiDict* owner);
+    HiDict* owner() {return _owner;}
+    int iter_cnt() {return _iter_cnt;}
+    void inc_cnt() {_iter_cnt++;}
+};
+
+enum ITER_TYPE {
+    ITER_KEY = 0,
+    ITER_VALUE,
+    ITER_ITEM
+};
+
+template <ITER_TYPE n>
+class DictIteratorKlass : public Klass {
+private:
+    static DictIteratorKlass* instance;
+    DictIteratorKlass();
+
+public:
+    static DictIteratorKlass* get_instance();
+    virtual HiObject* iter(HiObject* x) {return x;} // 自身已经是迭代器对象
+    virtual HiObject* next(HiObject* x);
+};
+
 HiObject* set_dict_default(ObjList args);
 HiObject* dict_pop(ObjList args);
-HiObject* dict_keys(ObjList args);
-HiObject* dict_values(ObjList args);
+HiObject* dict_iterkeys(ObjList args);
+HiObject* dict_itervalues(ObjList args);
+HiObject* dict_iteritems(ObjList args);
 
 # endif
