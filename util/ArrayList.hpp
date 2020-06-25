@@ -23,6 +23,7 @@ public:
     T    pop();
     void delete_index(int index);
     T    top();
+    int  index(T t);
 
     ~ArrayList() {
         delete[] _array;
