@@ -44,4 +44,26 @@ public:
     HiObject* getattr(HiObject* x);
 };
 
+class TypeKlass : public Klass {
+private:
+    TypeKlass();
+    static TypeKlass* instance;
+
+public:
+    void initialize();
+    static TypeKlass* get_instance();
+    virtual void print(HiObject* x);
+};
+
+class HiTypeObject : public HiObject {
+private:
+    Klass* _own_klass;
+
+public:
+    HiTypeObject();
+    void set_own_klass(Klass* k);
+    Klass* own_klass() { return _own_klass; }
+};
+
+
 # endif

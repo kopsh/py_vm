@@ -16,10 +16,6 @@ ListKlass* ListKlass::get_instance() {
 }
 
 ListKlass::ListKlass() {
-
-}
-
-void ListKlass::initialize() {
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("append"), new FunctionObject(list_append));
     klass_dict->put(new HiString("insert"), new FunctionObject(list_insert));
@@ -29,6 +25,9 @@ void ListKlass::initialize() {
     klass_dict->put(new HiString("reverse"), new FunctionObject(list_reverse));
     klass_dict->put(new HiString("sort"), new FunctionObject(list_sort));
     set_klass_dict(klass_dict);
+
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("list"));
 }
 
 HiList::HiList() {

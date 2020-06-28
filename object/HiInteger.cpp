@@ -1,4 +1,5 @@
 # include "object/HiInteger.hpp"
+# include "object/HiString.hpp"
 # include "runtime/universe.hpp"
 
 # include <iostream>
@@ -8,7 +9,8 @@ class IntegerKlass;
 IntegerKlass* IntegerKlass::instance = NULL;
 
 IntegerKlass::IntegerKlass() {
-
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("int"));
 }
 
 IntegerKlass* IntegerKlass::get_instance() {

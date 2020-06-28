@@ -19,7 +19,8 @@ DictKlass* DictKlass::get_instance() {
 }
 
 DictKlass::DictKlass() {
-
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("dict"));
 }
 
 void DictKlass::initialize() {

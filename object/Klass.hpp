@@ -2,16 +2,22 @@
 # define KLASS_HPP
 
 class HiObject;
+class HiTypeObject;
 class HiString;
 class HiDict;
 
 class Klass {
 private:
+    Klass* _super;
+    HiTypeObject* _type_obj;
     HiString* _name;
     HiDict* _klass_dict;
 
 public:
     Klass() {};
+    void set_type_object(HiTypeObject* t) { _type_obj = t; }
+    HiTypeObject* type_object() { return _type_obj; }
+
     void set_name(HiString* x) {_name = x;}
     HiString* name() {return _name;}
     void set_klass_dict(HiDict* dict) {_klass_dict = dict;}

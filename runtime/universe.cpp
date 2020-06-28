@@ -12,13 +12,13 @@ HiInteger* Universe::HiFalse = NULL;
 HiObject* Universe::HiNone = NULL;
 
 void Universe::genesis() {
+    TypeKlass::get_instance()->initialize();
+    DictKlass::get_instance()->initialize();
+    StringKlass::get_instance()->initialize();
+
     HiTrue = new HiInteger(1);
     HiFalse = new HiInteger(0);
     HiNone = new HiObject();
-
-    DictKlass::get_instance()->initialize();
-    ListKlass::get_instance()->initialize();
-    StringKlass::get_instance()->initialize();
 }
 
 void Universe::destory() {

@@ -13,7 +13,6 @@ private:
 
 public:
     static ListKlass* get_instance();
-    void initialize();
 
     virtual void print(HiObject* x);
     virtual void repr(HiObject* x);

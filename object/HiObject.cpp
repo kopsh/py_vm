@@ -1,6 +1,9 @@
 # include "object/HiObject.hpp"
 # include "runtime/functionObject.hpp"
+# include "runtime/Table.hpp"
 # include "runtime/universe.hpp"
+
+# include <iostream>
 
 void HiObject::print() {
     klass()->print(this);
@@ -95,4 +98,52 @@ HiObject* HiObject::getattr(HiObject* x) {
         res = new MethodObject(this, (FunctionObject* ) res);
 
     return res;
+}
+
+/*
+ * TypeKlass and HiTypeObject
+ */
+
+TypeKlass* TypeKlass::instance = NULL;
+
+TypeKlass* TypeKlass::get_instance() {
+    if (instance == NULL)
+        instance = new TypeKlass();
+
+    return instance;
+}
+
+TypeKlass::TypeKlass() {
+
+}
+
+void TypeKlass::initialize() {
+    (new HiTypeObject())->set_own_klass(this);
+    set_name(new HiString("type"));
+}
+
+void TypeKlass::print(HiObject* x) {
+    assert(x->klass() == (Klass* ) this);
+    printf("<type ");
+    Klass* own_klass = ((HiTypeObject*) x)->own_klass();
+
+    HiDict* attr_dict = own_klass->klass_dict();
+    if (attr_dict) {
+        HiObject* mod = attr_dict->get(StringTable::get_instance()->mod_str);
+        if (mod != Universe::HiNone) {
+            mod->print();
+            printf(".");
+        }
+    }
+    own_klass->name()->print();
+    printf(">");
+}
+
+HiTypeObject::HiTypeObject() {
+    set_klass(TypeKlass::get_instance());
+}
+
+void HiTypeObject::set_own_klass(Klass* k) {
+    _own_klass = k;
+    k->set_type_object(this);
 }

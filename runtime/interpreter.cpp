@@ -4,8 +4,7 @@
 # include "object/HiList.hpp"
 # include "object/HiString.hpp"
 # include "runtime/cellObject.hpp"
-# include "runtime/IntegerTable.hpp"
-# include "runtime/StringTable.hpp"
+# include "runtime/Table.hpp"
 # include "runtime/functionObject.hpp"
 # include "runtime/interpreter.hpp"
 # include "runtime/universe.hpp"
@@ -44,6 +43,11 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("None"), HI_NONE);
 
     _builtins->put(new HiString("len"), new FunctionObject(len));
+
+    _builtins->put(new HiString("list"), ListKlass::get_instance()->type_object());
+    _builtins->put(new HiString("int"), IntegerKlass::get_instance()->type_object());
+    _builtins->put(new HiString("dict"), DictKlass::get_instance()->type_object());
+    _builtins->put(new HiString("str"), StringKlass::get_instance()->type_object());
 }
 
 // 创建新的frameObject，由它维护新的运行状态

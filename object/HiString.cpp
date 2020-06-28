@@ -17,9 +17,14 @@ StringKlass* StringKlass::get_instance() {
 }
 
 void StringKlass::initialize() {
+    (new HiTypeObject())->set_own_klass(this);
+
+    set_name(new HiString("str"));
     HiDict* klass_dict = new HiDict();
     klass_dict->put(new HiString("upper"), new FunctionObject(string_upper));
     set_klass_dict(klass_dict);
+
+    set_name(new HiString("str"));
 }
 
 HiString::HiString(const char * x) {
