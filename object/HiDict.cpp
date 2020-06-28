@@ -21,6 +21,7 @@ DictKlass* DictKlass::get_instance() {
 DictKlass::DictKlass() {
     (new HiTypeObject())->set_own_klass(this);
     set_name(new HiString("dict"));
+    set_super(ObjectKlass::get_instance());
 }
 
 void DictKlass::initialize() {
@@ -90,6 +91,13 @@ HiObject* DictKlass::iter(HiObject* x) {
     HiObject* iter = new DictIterator(dx);
     iter->set_klass(DictIteratorKlass<ITER_KEY>::get_instance());
     return iter;
+}
+
+HiObject* DictKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0)
+        return new HiDict();
+    else
+        return NULL;
 }
 
 /***

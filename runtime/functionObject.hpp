@@ -26,6 +26,8 @@ public:
 };
 
 HiObject* len(ObjList args);
+HiObject* isinstance(ObjList args);
+HiObject* type_of(ObjList args);
 typedef HiObject* (*NativeFuncPointer)(ObjList args);
 
 class FunctionObject : public HiObject {

@@ -25,6 +25,7 @@ void StringKlass::initialize() {
     set_klass_dict(klass_dict);
 
     set_name(new HiString("str"));
+    set_super(ObjectKlass::get_instance());
 }
 
 HiString::HiString(const char * x) {
@@ -160,4 +161,11 @@ HiObject* StringKlass::subscr(HiObject* x, HiObject* y) {
     HiInteger* iy = (HiInteger* ) y;
 
     return new HiString(&(sx->value()[iy->value()]), 1);
+}
+
+HiObject* StringKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0)
+        return new HiString("");
+    else
+        return NULL;
 }

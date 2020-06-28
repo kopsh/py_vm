@@ -28,6 +28,7 @@ ListKlass::ListKlass() {
 
     (new HiTypeObject())->set_own_klass(this);
     set_name(new HiString("list"));
+    set_super(ObjectKlass::get_instance());
 }
 
 HiList::HiList() {
@@ -141,6 +142,13 @@ HiObject* ListKlass::add(HiObject* x, HiObject* y) {
     }
 
     return z;
+}
+
+HiObject* ListKlass::allocate_instance(ArrayList<HiObject*>* args) {
+    if (!args || args->length() == 0)
+        return new HiList();
+    else
+        return NULL;
 }
 
 /*

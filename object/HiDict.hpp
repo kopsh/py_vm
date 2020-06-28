@@ -14,6 +14,7 @@ private:
 public:
     static DictKlass* get_instance();
     void initialize();
+    virtual HiObject* allocate_instance(ObjList args);
 
     virtual HiObject* subscr(HiObject* x, HiObject* y);
     virtual HiObject* iter(HiObject* x);

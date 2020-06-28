@@ -65,5 +65,13 @@ public:
     Klass* own_klass() { return _own_klass; }
 };
 
+class ObjectKlass : public Klass {
+private:
+    static ObjectKlass* instance;
+    ObjectKlass();
+
+public:
+    static ObjectKlass* get_instance();
+};
 
 # endif

@@ -22,6 +22,8 @@ public:
     HiString* name() {return _name;}
     void set_klass_dict(HiDict* dict) {_klass_dict = dict;}
     HiDict* klass_dict() {return _klass_dict;}
+    Klass* super() { return _super; }
+    void set_super(Klass* k) { _super = k; }
     static int compare_klass(Klass* x, Klass* y);
 
     virtual void print(HiObject* obj) {}
@@ -48,6 +50,8 @@ public:
 
     virtual HiObject* iter(HiObject* x) {return 0;}
     virtual HiObject* next(HiObject* x) {return 0;}
+
+    virtual HiObject* allocate_instance(ObjList args) {return 0;}
 };
 
 # endif

@@ -11,6 +11,7 @@ IntegerKlass* IntegerKlass::instance = NULL;
 IntegerKlass::IntegerKlass() {
     (new HiTypeObject())->set_own_klass(this);
     set_name(new HiString("int"));
+    set_super(ObjectKlass::get_instance());
 }
 
 IntegerKlass* IntegerKlass::get_instance() {
@@ -203,4 +204,11 @@ HiObject* IntegerKlass::mod(HiObject* x, HiObject* y) {
     assert(iy->value() != 0);
 
     return new HiInteger(ix->value() % iy->value());
+}
+
+HiObject* IntegerKlass::allocate_instance(ObjList args) {
+    if (!args || args->length() == 0)
+        return new HiInteger(0);
+    else
+        return NULL;
 }

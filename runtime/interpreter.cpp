@@ -43,6 +43,7 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("None"), HI_NONE);
 
     _builtins->put(new HiString("len"), new FunctionObject(len));
+    _builtins->put(new HiString("isinstance"), new FunctionObject(isinstance));
 
     _builtins->put(new HiString("list"), ListKlass::get_instance()->type_object());
     _builtins->put(new HiString("int"), IntegerKlass::get_instance()->type_object());
@@ -66,6 +67,10 @@ void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
             args = new ArrayList<HiObject*>(1);
         args->insert(0, mo->owner());
         build_frame(mo->func(), args, op_arg + 1);
+    }
+    else if (callable->klass() == TypeKlass::get_instance()) {
+        HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(args);
+        PUSH(inst);
     }
 }
 

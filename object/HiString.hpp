@@ -12,6 +12,7 @@ private:
 public:
     static StringKlass* get_instance();
     void initialize();
+    virtual HiObject* allocate_instance(ObjList args);
 
     virtual void print(HiObject* obj);
     virtual void repr(HiObject* obj);

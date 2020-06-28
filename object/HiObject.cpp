@@ -147,3 +147,19 @@ void HiTypeObject::set_own_klass(Klass* k) {
     _own_klass = k;
     k->set_type_object(this);
 }
+
+/*
+ * ObjectKlass
+ */
+
+ObjectKlass* ObjectKlass::instance = NULL;
+
+ObjectKlass* ObjectKlass::get_instance() {
+    if (instance == NULL)
+        instance = new ObjectKlass();
+    return instance;
+}
+
+ObjectKlass::ObjectKlass() {
+    set_super(NULL);
+}
