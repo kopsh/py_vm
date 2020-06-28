@@ -5,8 +5,8 @@
 
 class Universe {
 public:
-    static HiString* HiFalse;
-    static HiString* HiTrue;
+    static HiObject* HiFalse;
+    static HiObject* HiTrue;
     static HiObject* HiNone;
 
     static void genesis();

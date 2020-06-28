@@ -1,6 +1,8 @@
 # ifndef KLASS_HPP
 # define KLASS_HPP
 
+# include "util/ArrayList.hpp"
+
 class HiObject;
 class HiTypeObject;
 class HiString;

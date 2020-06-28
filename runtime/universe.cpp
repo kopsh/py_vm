@@ -7,8 +7,8 @@
 
 # include <string.h>
 
-HiString* Universe::HiTrue = NULL;
-HiString* Universe::HiFalse = NULL;
+HiObject* Universe::HiTrue = NULL;
+HiObject* Universe::HiFalse = NULL;
 HiObject* Universe::HiNone = NULL;
 
 void Universe::genesis() {

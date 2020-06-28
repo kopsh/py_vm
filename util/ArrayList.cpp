@@ -133,7 +133,7 @@ T ArrayList<T>::top() {
 template <>
 int ArrayList<HiObject*>::index(HiObject* t) {
     for (int i = 0; i < _size; i++) {
-        if (_array[i]->equal(t) == Universe::HiTrue) {
+        if ((_array[i]->equal(t)) == Universe::HiTrue) {
             return i;
         }
     }
