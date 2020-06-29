@@ -14,8 +14,10 @@ public:
     static const unsigned char PRINT_NEWLINE = 72;
 
     static const unsigned char BREAK_LOOP = 80;
+    static const unsigned char LOAD_LOCALS = 82;
     static const unsigned char RETURN_VALUE = 83;
     static const unsigned char POP_BLOCK = 87;
+    static const unsigned char BUILD_CLASS = 89;
 
     // Opcodes from here have an argument
     static const unsigned char HAVE_ARGUMENT = 90; 
@@ -24,7 +26,7 @@ public:
     static const unsigned char UNPACK_SEQUENCE = 92; // number of the unpacked element
 
     static const unsigned char FOR_ITER = 93; // offset for _pc if iteration ends
-
+    static const unsigned char STORE_ATTR = 95; // index in name list
     static const unsigned char LOAD_CONST = 100; // index in const list
     static const unsigned char LOAD_NAME = 101; // index in name list
 

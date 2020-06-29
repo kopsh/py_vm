@@ -89,15 +89,12 @@ HiObject* HiObject::next() {
     return klass()->next(this);
 }
 
-
 HiObject* HiObject::getattr(HiObject* x) {
-    HiObject* res = Universe::HiNone;
-    res = klass()->klass_dict()->get(x);
+    return klass()->getattr(this, x);
+}
 
-    if (MethodObject::is_function(res))
-        res = new MethodObject(this, (FunctionObject* ) res);
-
-    return res;
+HiObject* HiObject::setattr(HiObject* x, HiObject* y) {
+    return klass()->setattr(this, x, y);
 }
 
 /*
@@ -114,7 +111,6 @@ TypeKlass* TypeKlass::get_instance() {
 }
 
 TypeKlass::TypeKlass() {
-
 }
 
 void TypeKlass::initialize() {
@@ -124,8 +120,12 @@ void TypeKlass::initialize() {
 
 void TypeKlass::print(HiObject* x) {
     assert(x->klass() == (Klass* ) this);
-    printf("<type ");
     Klass* own_klass = ((HiTypeObject*) x)->own_klass();
+
+    if (own_klass->builtin()) 
+        printf("<type ");
+    else
+        printf("<class ");
 
     HiDict* attr_dict = own_klass->klass_dict();
     if (attr_dict) {

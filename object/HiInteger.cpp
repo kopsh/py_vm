@@ -206,7 +206,7 @@ HiObject* IntegerKlass::mod(HiObject* x, HiObject* y) {
     return new HiInteger(ix->value() % iy->value());
 }
 
-HiObject* IntegerKlass::allocate_instance(ObjList args) {
+HiObject* IntegerKlass::allocate_instance(HiObject* callable, ObjList args) {
     if (!args || args->length() == 0)
         return new HiInteger(0);
     else

@@ -27,7 +27,7 @@ public:
     virtual HiObject* div(HiObject* x, HiObject* y);
     virtual HiObject* mod(HiObject* x, HiObject* y);
 
-    virtual HiObject* allocate_instance(ObjList);
+    virtual HiObject* allocate_instance(HiObject*, ObjList);
 };
 
 class HiInteger : public HiObject {

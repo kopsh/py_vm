@@ -8,6 +8,7 @@
 class HiObject {
 private:
     Klass* _klass;
+    HiDict* _obj_dict;
 
 public:
     Klass* klass() {
@@ -15,6 +16,8 @@ public:
         return _klass;
     }
     void set_klass(Klass* x) {_klass = x;}
+    HiDict* obj_dict() {return _obj_dict;}
+    void set_obj_dict(HiDict* x) { _obj_dict = x;}
 
     void print();
     void repr();
@@ -42,6 +45,7 @@ public:
     HiObject* next();
 
     HiObject* getattr(HiObject* x);
+    HiObject* setattr(HiObject* x, HiObject* y);
 };
 
 class TypeKlass : public Klass {

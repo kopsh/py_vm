@@ -5,7 +5,9 @@
 
 # include <iostream>
 
-FrameObject::FrameObject(CodeObject* codes) {
+// 初始化第一个FrameObject
+// globals == locals
+FrameObject::FrameObject(CodeObject* codes) {    
     _consts = codes->_consts;
     _names = codes->_names;
 
@@ -14,6 +16,7 @@ FrameObject::FrameObject(CodeObject* codes) {
 
     _locals = new HiDict();
     _globals = _locals;
+    _locals->put(new HiString("__name__"), new HiString("__main__"));
     _fast_locals = NULL;
     _closure = NULL;
 

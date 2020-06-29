@@ -13,7 +13,7 @@ private:
 
 public:
     static ListKlass* get_instance();
-    virtual HiObject* allocate_instance(ObjList args);
+    virtual HiObject* allocate_instance(HiObject* callable, ObjList args);
     
     virtual void print(HiObject* x);
     virtual void repr(HiObject* x);

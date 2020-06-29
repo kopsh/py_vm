@@ -49,6 +49,7 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("int"), IntegerKlass::get_instance()->type_object());
     _builtins->put(new HiString("dict"), DictKlass::get_instance()->type_object());
     _builtins->put(new HiString("str"), StringKlass::get_instance()->type_object());
+    _builtins->put(new HiString("object"), ObjectKlass::get_instance()->type_object());
 }
 
 // 创建新的frameObject，由它维护新的运行状态
@@ -69,7 +70,7 @@ void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
         build_frame(mo->func(), args, op_arg + 1);
     }
     else if (callable->klass() == TypeKlass::get_instance()) {
-        HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(args);
+        HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(callable, args);
         PUSH(inst);
     }
 }
@@ -163,6 +164,10 @@ void Interpreter::eval_frame() {
                     break;
                 }
                 PUSH(HI_NONE);
+                break;
+            
+            case ByteCode::LOAD_LOCALS:
+                PUSH(_frame->locals());
                 break;
 
             case ByteCode::PRINT_ITEM:
@@ -375,6 +380,13 @@ void Interpreter::eval_frame() {
                 PUSH(v->getattr(w));
                 break;
 
+            case ByteCode::STORE_ATTR:
+                v = POP();
+                u = _frame->names()->get(op_arg);
+                w = POP();
+                v->setattr(u, w);
+                break;
+
             case ByteCode::BUILD_TUPLE:
             case ByteCode::BUILD_LIST:
                 v = new HiList();
@@ -457,6 +469,14 @@ void Interpreter::eval_frame() {
                     args = NULL;
 
                 PUSH(fo);
+                break;
+
+            case ByteCode::BUILD_CLASS:
+                v = POP();
+                u = POP();
+                w = POP();
+                v = Klass::create_klass(v, u, w);
+                PUSH(v);
                 break;
 
             default:

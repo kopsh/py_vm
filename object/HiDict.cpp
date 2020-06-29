@@ -93,7 +93,7 @@ HiObject* DictKlass::iter(HiObject* x) {
     return iter;
 }
 
-HiObject* DictKlass::allocate_instance(ArrayList<HiObject*>* args) {
+HiObject* DictKlass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* args) {
     if (!args || args->length() == 0)
         return new HiDict();
     else
