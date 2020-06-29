@@ -52,6 +52,25 @@ Interpreter::Interpreter() {
     _builtins->put(new HiString("object"), ObjectKlass::get_instance()->type_object());
 }
 
+HiObject* Interpreter::call_virtual(HiObject* callable, ObjList args) {
+    if (callable->klass() == MethodKlass::get_instance()) {
+        MethodObject* mo = (MethodObject* ) callable;
+        if (args == NULL)
+            args = new ArrayList<HiObject*>(1);
+        args->insert(0, mo->owner());
+        call_virtual(mo->func(), args);
+    }
+    else if (callable->klass() == FunctionKlass::get_instance()) {
+        int size = args ? args->size() : 0;
+        FrameObject* frame = new FrameObject((FunctionObject*) callable, args, size);
+        frame->set_entry_frame(true);
+        enter_frame(frame);
+        eval_frame();
+        destory_frame();
+        return _ret_value;
+    }
+}
+
 // 创建新的frameObject，由它维护新的运行状态
 void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
     if (callable->klass() == NativeFunctionKlass::get_instance()) {
@@ -59,8 +78,7 @@ void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
     }
     else if (callable->klass() == FunctionKlass::get_instance()) {
         FrameObject* frame = new FrameObject((FunctionObject* ) callable, args, op_arg);
-        frame->set_sender(_frame);
-        _frame = frame;
+        enter_frame(frame);
     }
     else if (callable->klass() == MethodKlass::get_instance()) {
         MethodObject* mo = (MethodObject* ) callable;
@@ -91,9 +109,15 @@ void Interpreter::destory_frame() {
     delete temp;
 }
 
-// void Interpreter::leave_frame() {
-// 
-// }
+void Interpreter::enter_frame(FrameObject* frame) {
+    frame->set_sender(_frame);
+    _frame = frame;
+}
+
+void Interpreter::leave_frame() {
+    destory_frame();
+    PUSH(_ret_value);
+}
 
 void Interpreter::eval_frame() {
     Block* b;
@@ -206,9 +230,10 @@ void Interpreter::eval_frame() {
 
             case ByteCode::RETURN_VALUE:
                 _ret_value = POP();
-                // leave_frame();
-                destory_frame();
-                PUSH(_ret_value);
+                if (_frame->is_entry_frame()) {
+                    return;
+                }
+                leave_frame();
                 break;
 
             case ByteCode::COMPARE_OF:

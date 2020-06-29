@@ -21,8 +21,10 @@ public:
 
     void build_frame(HiObject* callable, ObjList args, int op_arg);
     void eval_frame();
-    // void leave_frame();
+    void enter_frame(FrameObject* );
+    void leave_frame();
     void destory_frame();
+    HiObject* call_virtual(HiObject*, ObjList);
 };
 
 

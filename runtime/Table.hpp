@@ -11,6 +11,7 @@ private:
     StringTable() {
         next_str = new HiString("next");
         mod_str = new HiString("__module__");
+        init_str = new HiString("__init__");
     };
 
 public:
@@ -18,6 +19,7 @@ public:
     
     HiString* next_str;
     HiString* mod_str;
+    HiString* init_str;
 };
 
 class IntegerTable {

@@ -48,12 +48,15 @@ public:
 
     CodeObject* _codes;
     int _pc;
+    bool _entry_frame; // c++代码调用Python代码产生的第一个帧 entryframe
 
     FrameObject* _sender; // 记录调用者的栈帧，每调用一个新的栈帧，插入到链表头部，销毁时先销毁头结点，满足“后进先出”
 
 public:
     void set_pc(int x) {_pc = x;}
     int get_pc() {return _pc;}
+    bool is_entry_frame() { return _entry_frame;}
+    void set_entry_frame(bool x) { _entry_frame = x; }
 
     ObjList stack() {return _stack;}
     ArrayList<Block*>* loop_stack() {return _loop_stack;}

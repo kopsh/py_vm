@@ -4,6 +4,8 @@
 # include "object/HiDict.hpp"
 # include "object/HiList.hpp"
 # include "runtime/functionObject.hpp"
+# include "runtime/interpreter.hpp"
+# include "runtime/Table.hpp"
 # include "runtime/universe.hpp"
 
 # include "assert.h"
@@ -49,6 +51,10 @@ HiObject* Klass::create_klass(HiObject* dict, HiObject* supers, HiObject* name) 
 HiObject* Klass::allocate_instance(HiObject* callable, ArrayList<HiObject*>* args) {
     HiObject* inst = new HiObject();
     inst->set_klass(((HiTypeObject*)callable)->own_klass());
+    HiObject* constructor = inst->getattr(StringTable::get_instance()->init_str);
+    if (constructor != Universe::HiNone) {
+        Interpreter::get_instance()->call_virtual(constructor, args);
+    }
     return inst;
 }
 
