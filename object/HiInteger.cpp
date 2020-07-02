@@ -11,7 +11,7 @@ IntegerKlass* IntegerKlass::instance = NULL;
 IntegerKlass::IntegerKlass() {
     (new HiTypeObject())->set_own_klass(this);
     set_name(new HiString("int"));
-    set_super(ObjectKlass::get_instance());
+    add_super(ObjectKlass::get_instance());
 }
 
 IntegerKlass* IntegerKlass::get_instance() {

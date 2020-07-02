@@ -18,6 +18,8 @@
 # define POP() _frame->stack()->pop()
 # define TOP() _frame->stack()->top()
 # define STACK_LEVEL() _frame->stack()->size()
+# define ST(x) StringTable::get_instance()->STR(x)
+# define STR(x) x##_str
 
 # define HI_TRUE Universe::HiTrue
 # define HI_FALSE Universe::HiFalse
@@ -90,6 +92,16 @@ void Interpreter::build_frame(HiObject* callable, ObjList args, int op_arg) {
     else if (callable->klass() == TypeKlass::get_instance()) {
         HiObject* inst = ((HiTypeObject*)callable)->own_klass()->allocate_instance(callable, args);
         PUSH(inst);
+    }
+    else {
+        HiObject* m = callable->getattr(ST(call));
+        if (m != Universe::HiNone) {
+            build_frame(m, args, op_arg);
+        }
+        else {
+            callable->print();
+            printf("\nError: cannot call a normal object!");
+        }
     }
 }
 

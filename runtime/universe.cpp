@@ -21,15 +21,25 @@ void Universe::genesis() {
 
     HiTypeObject* tp_obj = new HiTypeObject();
     tp_obj->set_own_klass(type_klass);
-    type_klass->set_super(object_klass);
-
+ 
     HiTypeObject* obj_obj = new HiTypeObject();
     obj_obj->set_own_klass(object_klass);
-    object_klass->set_super(NULL);
 
     TypeKlass::get_instance()->initialize();
     DictKlass::get_instance()->initialize();
     StringKlass::get_instance()->initialize();
+    ListKlass::get_instance()->initialize();
+
+    TypeKlass::get_instance()->order_supers();
+    DictKlass::get_instance()->order_supers();
+    StringKlass::get_instance()->order_supers();
+    ListKlass::get_instance()->order_supers();
+    IntegerKlass::get_instance()->order_supers();
+    type_klass->order_supers();
+
+    NativeFunctionKlass::get_instance()->order_supers();
+    MethodKlass::get_instance()->order_supers();
+    FunctionKlass::get_instance()->order_supers();
 
     type_klass->set_klass_dict(new HiDict());
     object_klass->set_klass_dict(new HiDict());

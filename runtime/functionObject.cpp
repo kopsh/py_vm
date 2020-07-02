@@ -107,11 +107,12 @@ HiObject* isinstance(ObjList args) {
     assert(y && y->klass() == TypeKlass::get_instance());
 
     Klass* k = x->klass();
-    while (k != NULL) {
-        if (k == ((HiTypeObject*) y)->own_klass())
+    if (k->type_object() == y)
+        return Universe::HiTrue;
+
+    for (int i=0; i < k->mro()->size(); i++) {
+        if (k->mro()->get(i) == y)
             return Universe::HiTrue;
-        
-        k = k->super();
     }
 
     return Universe::HiFalse;

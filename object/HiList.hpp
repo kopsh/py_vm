@@ -13,6 +13,7 @@ private:
 
 public:
     static ListKlass* get_instance();
+    void initialize();
     virtual HiObject* allocate_instance(HiObject* callable, ObjList args);
     
     virtual void print(HiObject* x);
@@ -44,6 +45,7 @@ public:
     void insert(int i, HiObject* obj) { _inner_list->insert(i, obj); }
     HiObject* top() { return get(size()-1); }
     void delete_index(int i) { _inner_list->delete_index(i); }
+    int index(HiObject* x) { return _inner_list->index(x); }
 };
 
 class ListIteratorKlass : public Klass {

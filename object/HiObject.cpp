@@ -149,6 +149,16 @@ void HiTypeObject::set_own_klass(Klass* k) {
 }
 
 /*
+ *  a = A()
+ *  A.attr = 1
+ *  a.attr = 1  
+ */ 
+HiObject* TypeKlass::setattr(HiObject* x, HiObject* y, HiObject* z) {
+    HiTypeObject* h = (HiTypeObject*) x;
+    h->own_klass()->klass_dict()->put(y, z);
+    return Universe::HiNone;
+}
+/*
  * ObjectKlass
  */
 
@@ -161,5 +171,5 @@ ObjectKlass* ObjectKlass::get_instance() {
 }
 
 ObjectKlass::ObjectKlass() {
-    set_super(NULL);
+    add_super(NULL);
 }

@@ -57,6 +57,7 @@ public:
     void initialize();
     static TypeKlass* get_instance();
     virtual void print(HiObject* x);
+    virtual HiObject* setattr(HiObject* x, HiObject* y, HiObject* z);
 };
 
 class HiTypeObject : public HiObject {
